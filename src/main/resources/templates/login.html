@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{/login}" method="post">
+    <label for="username">email:</label>
+    <input type="text" id="username" name="username" required>
+    <br><br>
+
+    <label for="password">Jelszó:</label>
+    <input type="password" id="password" name="password" required>
+    <br><br>
+
+    <button type="submit">Bejelentkezés</button>
+</form>
+
+<div th:if="${param.error}" class="error">
+    <p style="color: red;">Hibás felhasználónév vagy jelszó!</p>
+</div>
+
+
+
+</body>
+</html>
