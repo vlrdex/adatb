@@ -1,8 +1,10 @@
 package com.adatb.repjegy_fogalas.Controller;
 
+import com.adatb.repjegy_fogalas.DAO.TownDAO;
 import com.adatb.repjegy_fogalas.DAO.UserDAO;
 import com.adatb.repjegy_fogalas.Model.Custom_User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ public class UserController {
         this.userDAO=userDAO;
         this.passwordEncoder=passwordEncoder;
     }
+    @Autowired
+    private TownDAO townDAO;
 
     @GetMapping("/login")
     public String login(){
@@ -37,6 +41,12 @@ public class UserController {
     @GetMapping("/regist")
     public String regist(){
         return "regist";
+    }
+
+    @GetMapping("/admin")
+    public String admin(Model model){
+        model.addAttribute("town", townDAO.readAllTown());
+        return "admin";
     }
 
     @PostMapping("/regist")
