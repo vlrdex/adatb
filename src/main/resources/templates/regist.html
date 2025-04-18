@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    li{
+        display: inline-block;
+        list-style-position: outside;
+        list-style-type: none;
+        margin: 10px;
+    }
+</style>
+<header>
+    <div>
+        <ul>
+            <li>
+                <a href="/">Index</a>
+            </li>
+            <li>
+                <a href="/login">Login</a>
+            </li>
+            <li>
+                <a href="/regist">Regist</a>
+            </li>
+        </ul>
+    </div>
+</header>
 <body>
 <form th:action="@{/regist}" method="post">
     <label for="email">Email:</label>
