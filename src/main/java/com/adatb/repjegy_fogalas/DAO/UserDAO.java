@@ -1,9 +1,13 @@
 package com.adatb.repjegy_fogalas.DAO;
 
 import com.adatb.repjegy_fogalas.Model.Custom_User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -27,6 +31,18 @@ public class UserDAO {
         jdbcTemplate.update("INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES (?,?,?,TO_DATE(?, 'YYYY-MM-DD'),0)",
                 user.getEmail(),user.getName(),user.getPassword(),user.getBirthDate());
     }
+
+    public int updateUser(Custom_User user,String old_email){
+        return jdbcTemplate.update("UPDATE FELHASZNALOK SET email=? , nev = ? , jelszo=? , szuletesi_datum=TO_DATE(?, 'YYYY-MM-DD') WHERE email = ?"
+                ,user.getEmail(),user.getName(),user.getPassword(),user.getBirthDate(),old_email);
+    }
+
+    public void deleteUser(String email, HttpServletRequest request, HttpServletResponse response){
+        jdbcTemplate.update("DELETE FROM FELHASZNALOK WHERE email = ?", email);
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+    }
+
 
     public static class UserRowMapper implements RowMapper<Custom_User>{
 
