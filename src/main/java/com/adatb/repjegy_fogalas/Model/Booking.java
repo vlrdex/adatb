@@ -8,10 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Hotel {
+public class Booking {
     private int id;
-    private int townId;
-    private String name;
-    private String description;
-
+    private int flight_id;
+    private int ticket_category_id;
+    private int seat;
 }

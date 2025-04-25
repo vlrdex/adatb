@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/plane/createplane}" method="post">
+
+    <label for="model">Repülő modellje neve:</label>
+    <select id="model" name="model">
+        <option value="" disabled selected>Válasz modelt</option>
+        <option th:each="planemodel: ${planemodel}"
+        th:value="${planemodel.model}"
+        th:text="${planemodel.name}">
+        </option>
+    </select>
+    <label for="serviceProvider">Repülő szolgáltatója:</label>
+    <input type="text" id="serviceProvider" name="serviceProvider" maxlength="100" required><br><br>
+
+    <button type="submit">Biztosítás hozzáadása</button>
+</form>
+</body>
+</html>

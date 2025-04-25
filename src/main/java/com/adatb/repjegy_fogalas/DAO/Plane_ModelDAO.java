@@ -17,21 +17,26 @@ public class Plane_ModelDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createInsurance(Plane_Model plane_Model){
-        jdbcTemplate.update("INSERT INTO MODEL (model, nev, ulohelyek_szama) VALUES (?,?,?)",
-                plane_Model.getModel(),plane_Model.getName(),plane_Model.getSeatsNumber());
+    public void createPlaneModel(String model, String nev, int ulohelyekSzama){
+        jdbcTemplate.update("INSERT INTO MODELL (modell, nev, ulohelyek_szama) VALUES (?,?,?)",
+                model, nev, ulohelyekSzama);
     }
 
     public List<Plane_Model> readAllPlane_Model(){
-        List<Plane_Model> result = jdbcTemplate.query("SELECT * FROM MODEL",new Plane_ModelDAO.Plane_ModelRowMapper());
+        List<Plane_Model> result = jdbcTemplate.query("SELECT * FROM MODELL",new Plane_ModelDAO.Plane_ModelRowMapper());
         return result.isEmpty()? null : result;
     }
 
-    public int updatePlane_Model(int id, String nev, int ulohely_szama){
-        return jdbcTemplate.update("UPDATE MODEL SET nev = ? AND ulohelyek_szama = ? WHERE id = ?", nev, ulohely_szama, id);
+    public Plane_Model getPlaneModelById(String id){
+        List<Plane_Model> result = jdbcTemplate.query("SELECT * FROM MODELL WHERE modell = ?",new Plane_ModelDAO.Plane_ModelRowMapper(), id);
+        return result.get(0);
     }
-    public int deletePlane_Model(int id){
-        return jdbcTemplate.update("DELETE FROM MODEL WHERE id = ?", id);
+
+    public int updatePlane_Model(String id, String nev, int ulohely_szama){
+        return jdbcTemplate.update("UPDATE MODELL SET nev = ?, ulohelyek_szama = ? WHERE modell = ?", nev, ulohely_szama, id);
+    }
+    public int deletePlane_Model(String id){
+        return jdbcTemplate.update("DELETE FROM MODELL WHERE modell = ?", id);
     }
 
 
@@ -40,7 +45,7 @@ public class Plane_ModelDAO {
         @Override
         public Plane_Model mapRow(ResultSet rs, int rowNum) throws SQLException {
             return Plane_Model.builder()
-                    .model(rs.getString("MODEL"))
+                    .model(rs.getString("MODELL"))
                     .name(rs.getString("NEV"))
                     .seatsNumber(rs.getInt("ULOHELYEK_SZAMA"))
                     .build();

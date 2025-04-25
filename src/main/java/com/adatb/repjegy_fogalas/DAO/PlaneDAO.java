@@ -18,9 +18,9 @@ public class PlaneDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createPlane(Plane plane){
-        jdbcTemplate.update("INSERT INTO REPULOGEP (id, model, szolgaltato) VALUES (?,?,?)",
-                plane.getId(),plane.getModel(),plane.getServiceProvider());
+    public void createPlane(String model, String szolgaltato){
+        jdbcTemplate.update("INSERT INTO REPULOGEP (modell, szolgaltato) VALUES (?,?)",
+                model, szolgaltato);
     }
 
     public List<Plane> readAllPlane(){
@@ -28,8 +28,13 @@ public class PlaneDAO {
         return result.isEmpty()? null : result;
     }
 
-    public int updatePlane(int id, String model, int szolgaltato) {
-        return jdbcTemplate.update("UPDATE REPULOGEP SET model = ? AND szolgaltato = ? WHERE id = ?", model, szolgaltato, id);
+    public Plane getPlaneById(int id){
+        List<Plane> result = jdbcTemplate.query("SELECT * FROM REPULOGEP WHERE id = ?",new PlaneDAO.PlaneRowMapper(), id);
+        return result.get(0);
+    }
+
+    public int updatePlane(int id, String model, String szolgaltato) {
+        return jdbcTemplate.update("UPDATE REPULOGEP SET modell = ?, szolgaltato = ? WHERE id = ?", model, szolgaltato, id);
     }
     public int deletePlane(int id){
         return jdbcTemplate.update("DELETE FROM REPULOGEP WHERE id = ?", id);
@@ -42,7 +47,7 @@ public class PlaneDAO {
         public Plane mapRow(ResultSet rs, int rowNum) throws SQLException {
             return Plane.builder()
                     .id(rs.getInt("ID"))
-                    .model(rs.getString("MODEL"))
+                    .model(rs.getString("MODELL"))
                     .serviceProvider(rs.getString("SZOLGALTATO"))
                     .build();
         }

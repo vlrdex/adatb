@@ -11,6 +11,9 @@
         list-style-type: none;
         margin: 10px;
     }
+    td{
+        border: black solid 1px;
+    }
 </style>
 <header>
     <div>
@@ -32,6 +35,9 @@
 </header>
 <body>
 <div>
+    <form th:action="@{'/admin/town/createtown'}" method="get">
+        <button type="submit">Új város</button>
+    </form>
     <table>
         <thead>
         <tr>
@@ -43,6 +49,290 @@
         <tr th:each="town: ${town}">
             <td th:text="${town.id}"></td>
             <td th:text="${town.name}"></td>
+            <td>
+                <form th:action="@{'/admin/town/delete/' + ${town.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/town/update/' + ${town.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/insurance/createinsurance'}" method="get">
+        <button type="submit">Új biztosítás</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Név</th>
+            <th>Ár</th>
+            <th>Leírás</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="insurance: ${insurance}">
+            <td th:text="${insurance.id}"></td>
+            <td th:text="${insurance.name}"></td>
+            <td th:text="${insurance.cost}"></td>
+            <td th:text="${insurance.description}"></td>
+            <td>
+                <form th:action="@{'/admin/insurance/delete/' + ${insurance.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/insurance/update/' + ${insurance.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/ticketcategory/createticketcategory'}" method="get">
+        <button type="submit">Új jegykategória</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Név</th>
+            <th>Kedvezmény</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticketcategory: ${ticketcategory}">
+            <td th:text="${ticketcategory.id}"></td>
+            <td th:text="${ticketcategory.name}"></td>
+            <td th:text="${ticketcategory.discount}"></td>
+            <td>
+                <form th:action="@{'/admin/ticketcategory/delete/' + ${ticketcategory.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/ticketcategory/update/' + ${ticketcategory.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/planemodel/createplanemodel'}" method="get">
+        <button type="submit">Új repülőgép modell</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>Modell</th>
+            <th>Név</th>
+            <th>Ülőhelyek száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="planemodel: ${planemodel}">
+            <td th:text="${planemodel.model}"></td>
+            <td th:text="${planemodel.name}"></td>
+            <td th:text="${planemodel.seatsNumber}"></td>
+            <td>
+                <form th:action="@{'/admin/planemodel/delete/' + ${planemodel.model}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/planemodel/update/' + ${planemodel.model}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/plane/createplane'}" method="get">
+        <button type="submit">Új repülőgép</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Modell</th>
+            <th>Szolgáltató</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="plane: ${plane}">
+            <td th:text="${plane.id}"></td>
+            <td th:text="${plane.model}"></td>
+            <td th:text="${plane.serviceProvider}"></td>
+            <td>
+                <form th:action="@{'/admin/plane/delete/' + ${plane.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/plane/update/' + ${plane.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/hotel/createhotel'}" method="get">
+        <button type="submit">Új hotel</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Város_ID</th>
+            <th>Név</th>
+            <th>Leírás</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hotel: ${hotel}">
+            <td th:text="${hotel.id}"></td>
+            <td th:text="${hotel.townId}"></td>
+            <td th:text="${hotel.name}"></td>
+            <td th:text="${hotel.description}"></td>
+            <td>
+                <form th:action="@{'/admin/hotel/delete/' + ${hotel.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/hotel/update/' + ${hotel.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/flight/createflight'}" method="get">
+        <button type="submit">Új járat</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Kiindulási idő</th>
+            <th>Érkezési idő</th>
+            <th>Kiindulási Város</th>
+            <th>Érkezési Város</th>
+            <th>Repülő ID</th>
+            <th>Ár</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="flight: ${flight}">
+            <td th:text="${flight.id}"></td>
+            <td th:text="${flight.startingTime}"></td>
+            <td th:text="${flight.landingTime}"></td>
+            <td th:text="${flight.startingTown}"></td>
+            <td th:text="${flight.landingTown}"></td>
+            <td th:text="${flight.planeId}"></td>
+            <td th:text="${flight.price}"></td>
+            <td>
+                <form th:action="@{'/admin/flight/delete/' + ${flight.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/flight/update/' + ${flight.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/ticket/createticket'}" method="get">
+        <button type="submit">Új jegy</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>Járat ID</th>
+            <th>Ülőhely</th>
+            <th>Biztosítás ID</th>
+            <th>Név</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket: ${ticket}">
+            <td th:text="${ticket.flightId}"></td>
+            <td th:text="${ticket.seat}"></td>
+            <td th:text="${ticket.insuranceId}"></td>
+            <td th:text="${ticket.name}"></td>
+            <td th:text="${ticket.email}"></td>
+            <td>
+                <form th:action="@{'/admin/ticket/delete/' + ${ticket.flightId}+'/'+${ticket.seat}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/ticket/update/' + ${ticket.flightId}+'/'+${ticket.seat}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <form th:action="@{'/admin/booking/createbooking'}" method="get">
+        <button type="submit">Új jegy</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Járat ID</th>
+            <th>Jegykategória ID</th>
+            <th>Ülőhely</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking: ${booking}">
+            <td th:text="${booking.id}"></td>
+            <td th:text="${booking.flight_id}"></td>
+            <td th:text="${booking.ticket_category_id}"></td>
+            <td th:text="${booking.seat}"></td>
+            <td>
+                <form th:action="@{'/admin/booking/delete/' + ${booking.id}}" method="post">
+                    <button type="submit">Törlés</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/admin/booking/update/' + ${booking.id}}" method="get">
+                    <button type="submit">Módosítás</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -1,6 +1,7 @@
 package com.adatb.repjegy_fogalas.DAO;
 
 import com.adatb.repjegy_fogalas.Model.Custom_User;
+import com.adatb.repjegy_fogalas.Model.Ticket;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,11 @@ public class UserDAO {
     public void creatUser(Custom_User user){
         jdbcTemplate.update("INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES (?,?,?,TO_DATE(?, 'YYYY-MM-DD'),0)",
                 user.getEmail(),user.getName(),user.getPassword(),user.getBirthDate());
+    }
+
+    public List<Custom_User> readAllUser(){
+        List<Custom_User> result = jdbcTemplate.query("SELECT * FROM FELHASZNALOK",new UserDAO.UserRowMapper());
+        return result.isEmpty()? null : result;
     }
 
     public int updateUser(Custom_User user,String old_email){

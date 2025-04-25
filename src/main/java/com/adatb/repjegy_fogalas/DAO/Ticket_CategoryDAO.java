@@ -1,4 +1,5 @@
 package com.adatb.repjegy_fogalas.DAO;
+import com.adatb.repjegy_fogalas.Model.Insurance;
 import com.adatb.repjegy_fogalas.Model.Ticket_Category;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,9 +18,9 @@ public class Ticket_CategoryDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createTicket_Category(Ticket_Category ticket_Category){
-        jdbcTemplate.update("INSERT INTO JEGYKATEGORIA (id, nev, kedvezmeny) VALUES (?,?,?)",
-                ticket_Category.getId(),ticket_Category.getName(),ticket_Category.getDiscount());
+    public void createTicket_Category(String nev, int kedvezmeny){
+        jdbcTemplate.update("INSERT INTO JEGYKATEGORIA (nev, kedvezmeny) VALUES (?,?)",
+                nev,kedvezmeny);
     }
 
     public List<Ticket_Category> readAllTicket_Category(){
@@ -27,8 +28,13 @@ public class Ticket_CategoryDAO {
         return result.isEmpty()? null : result;
     }
 
+    public Ticket_Category getTicketCategoryById(int id){
+        List<Ticket_Category> result = jdbcTemplate.query("SELECT * FROM JEGYKATEGORIA WHERE id = ?",new Ticket_CategoryDAO.Ticket_CategoryRowMapper(), id);
+        return result.get(0);
+    }
+
     public int updateTicket_Category(int id, String nev, int kedvezmeny) {
-        return jdbcTemplate.update("UPDATE JEGYKATEGORIA SET nev = ? AND kedvezmeny = ? WHERE id = ?", nev, kedvezmeny, id);
+        return jdbcTemplate.update("UPDATE JEGYKATEGORIA SET nev = ?, kedvezmeny = ? WHERE id = ?", nev, kedvezmeny, id);
     }
     public int deleteTicket_Category(int id){
         return jdbcTemplate.update("DELETE FROM JEGYKATEGORIA WHERE id = ?", id);

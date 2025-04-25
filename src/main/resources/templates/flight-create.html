@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/flight/createflight}" method="post">
+
+    <label for="startingTime">Járat indulása:</label>
+    <input type="datetime-local" id="startingTime" name="startingTime" required><br><br>
+    <label for="landingTime">Járat érkezése:</label>
+    <input type="datetime-local" id="landingTime" name="landingTime" required><br><br>
+    <label for="startingTown">Indulási város:</label>
+    <select id="startingTown" name="startingTown">
+        <option value="" disabled selected>Válasz várost</option>
+        <option th:each="town: ${town}"
+                th:value="${town.id}"
+                th:text="${town.name}">
+        </option>
+    </select>
+    <label for="landingTown">Érkezési város:</label>
+    <select id="landingTown" name="landingTown">
+        <option value="" disabled selected>Válasz várost</option>
+        <option th:each="town: ${town}"
+                th:value="${town.id}"
+                th:text="${town.name}">
+        </option>
+    </select>
+    <label for="planeId">Repülő:</label>
+    <select id="planeId" name="planeId">
+        <option value="" disabled selected>Válasz repülőt</option>
+        <option th:each="plane: ${plane}"
+                th:value="${plane.id}"
+                th:text="${plane.model}">
+        </option>
+    </select>
+    <label for="price">Ár:</label>
+    <input type="number" id="price" name="price" required><br><br>
+
+    <button type="submit">Járat hozzáadása</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/hotel/createhotel}" method="post">
+
+    <label for="name">Hotel neve:</label>
+    <input type="text" id="name" name="name" maxlength="100" required><br><br>
+    <label for="townId">Városa:</label>
+    <select id="townId" name="townId">
+        <option value="" disabled selected>Válasz várost</option>
+        <option th:each="town: ${town}"
+                th:value="${town.id}"
+                th:text="${town.name}">
+        </option>
+    </select>
+    <label for="description">Hotel leírása:</label>
+    <input type="text" id="description" name="description" maxlength="100" required><br><br>
+
+    <button type="submit">Hotel hozzáadása</button>
+</form>
+</body>
+</html>

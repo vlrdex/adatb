@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/plane/update/{plane_id}(plane_id=${plane.id})}" method="post">
+
+    <label for="model">Repülő modellje neve:</label>
+    <select id="model" name="model">
+<!--        TODO: Lekérdezni a repülő nevét (nem fontos)-->
+        <option th:value="${plane.model}" selected th:text="${plane.model}"></option>
+        <option th:each="planemodel: ${planemodel}"
+                th:value="${planemodel.model}"
+                th:text="${planemodel.name}">
+        </option>
+    </select>
+    <label for="serviceProvider">Szolgáltató:</label>
+    <input type="text" id="serviceProvider" name="serviceProvider" th:value="${plane.serviceProvider}" maxlength="100" required><br><br>
+
+    <button type="submit">Repülőgép modell módosítása</button>
+</form>
+</body>
+</html>

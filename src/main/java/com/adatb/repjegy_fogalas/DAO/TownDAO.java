@@ -17,14 +17,18 @@ public class TownDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createTown(Town town){
-        jdbcTemplate.update("INSERT INTO VAROS (id, nev) VALUES (?,?)",
-                town.getId(),town.getName());
+    public void createTown(String nev){
+        jdbcTemplate.update("INSERT INTO VAROS (nev) VALUES (?)",
+                nev);
     }
 
     public List<Town> readAllTown(){
         List<Town> result = jdbcTemplate.query("SELECT * FROM VAROS",new TownDAO.TownRowMapper());
         return result.isEmpty()? null : result;
+    }
+    public Town getTownById(int id){
+        List<Town> result = jdbcTemplate.query("SELECT * FROM VAROS WHERE id = ?",new TownDAO.TownRowMapper(), id);
+        return result.get(0);
     }
 
     public int updateTown(int id, String nev){

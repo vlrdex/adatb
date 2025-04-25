@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/hotel/update/{hotel_id}(hotel_id=${hotel.id})}" method="post">
+
+    <label for="name">Neve:</label>
+    <input type="text" id="name" name="name" th:value="${hotel.name}" maxlength="100" required><br><br>
+    <label for="townname">Városa:</label>
+    <input type="text" id="townname" name="townname" th:value="${town.name}" maxlength="100" readonly><br><br>
+    <label for="description">Leírása:</label>
+    <input type="text" id="description" name="description" th:value="${hotel.description}" maxlength="100" required><br><br>
+
+    <button type="submit">Hotel módosítása</button>
+</form>
+</body>
+</html>

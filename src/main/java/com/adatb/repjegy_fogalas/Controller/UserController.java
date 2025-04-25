@@ -35,8 +35,6 @@ public class UserController {
         this.userDAO=userDAO;
         this.passwordEncoder=passwordEncoder;
     }
-    @Autowired
-    private TownDAO townDAO;
 
     @GetMapping("/login")
     public String login(){
@@ -53,11 +51,7 @@ public class UserController {
         return "regist";
     }
 
-    @GetMapping("/admin")
-    public String admin(Model model){
-        model.addAttribute("town", townDAO.readAllTown());
-        return "admin";
-    }
+
 
     @PostMapping("/regist")
     public String regist(

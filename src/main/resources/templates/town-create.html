@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/town/createtown}" method="post">
+
+    <label for="name">Város neve:</label>
+    <input type="text" id="name" name="name" maxlength="100" required><br><br>
+
+    <button type="submit">Város hozzáadása</button>
+</form>
+</body>
+</html>

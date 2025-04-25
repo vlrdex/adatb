@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/admin/planemodel/update/{planemodel_id}(planemodel_id=${planemodel.model})}" method="post">
+    <label for="name">Neve:</label>
+    <input type="text" id="name" name="name" th:value="${planemodel.name}" required><br>
+    <label for="seatsNumber">Ülőhelyek száma:</label>
+    <input type="number" id="seatsNumber" name="seatsNumber" th:value="${planemodel.seatsNumber}" required><br>
+
+    <button type="submit">Repülőgép modell módosítása</button>
+</form>
+</body>
+</html>
