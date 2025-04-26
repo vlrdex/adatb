@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    li{
+        display: inline-block;
+        list-style-position: outside;
+        list-style-type: none;
+        margin: 10px;
+    }
+</style>
+<header>
+    <div>
+        <ul>
+            <li>
+                <a href="/">Index</a>
+            </li>
+            <li>
+                <a href="/login">Login</a>
+            </li>
+            <li>
+                <a href="/regist">Regist</a>
+            </li>
+            <li>
+                <a href="/admin">Admin</a>
+            </li>
+            <li>
+                <a href="/profil">Profil</a>
+            </li>
+            <li>
+                <a href="/ticket">Ticket</a>
+            </li>
+        </ul>
+    </div>
+</header>
+<body>
+<div>
+    <form th:action="@{'/ticket'}" method="get">
+        <button type="submit">Keresés </button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <th>Járat ID</th>
+            <th>Kiindulási város</th>
+            <th>Kiindulási idő</th>
+            <th>Érkezési város</th>
+            <th>Érkezési idő</th>
+            <th>Repülő ID</th>
+            <th>Ár</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customflight: ${customflight}">
+            <td th:text="${customflight.flightId}"></td>
+            <td th:text="${customflight.startingTown}"></td>
+            <td th:text="${customflight.startingTime}"></td>
+            <td th:text="${customflight.landingTown}"></td>
+            <td th:text="${customflight.landingTime}"></td>
+            <td th:text="${customflight.planeId}"></td>
+            <td th:text="${customflight.price}"></td>
+            <td>
+                <form th:action="@{'/ticket/create/' + ${customflight.flightId}}" method="get">
+                    <button type="submit">Foglalás</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

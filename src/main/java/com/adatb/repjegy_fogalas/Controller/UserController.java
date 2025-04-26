@@ -1,8 +1,9 @@
 package com.adatb.repjegy_fogalas.Controller;
 
-import com.adatb.repjegy_fogalas.DAO.TownDAO;
-import com.adatb.repjegy_fogalas.DAO.UserDAO;
+import com.adatb.repjegy_fogalas.DAO.*;
+import com.adatb.repjegy_fogalas.Model.Booking;
 import com.adatb.repjegy_fogalas.Model.Custom_User;
+import com.adatb.repjegy_fogalas.Model.Ticket;
 import com.adatb.repjegy_fogalas.Service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -29,6 +32,8 @@ public class UserController {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private Custom_TicketDAO customTicketDAO;
 
     @Autowired
     UserController(UserDAO userDAO, PasswordEncoder passwordEncoder){
@@ -81,11 +86,12 @@ public class UserController {
     }
 
     @GetMapping("/profil")
-    public String profil( Model model){
+    public String profil(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Custom_User user = userDAO.findByEmail(email);
         model.addAttribute("user",user);
+        model.addAttribute("customticket", customTicketDAO.readUserCustom_Ticket(email));
         return "profil";
 
     }

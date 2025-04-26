@@ -31,6 +31,10 @@ public class BookingDAO {
         List<Booking> result = jdbcTemplate.query("SELECT * FROM FOGLALAS WHERE id = ?",new BookingDAO.BookingRowMapper(), id);
         return result.get(0);
     }
+    public Booking getBookingByFlightIdAndSeat(int jarat_id, int ulohely){
+        List<Booking> result = jdbcTemplate.query("SELECT * FROM FOGLALAS WHERE jarat_id = ? AND ulohely = ?",new BookingDAO.BookingRowMapper(), jarat_id, ulohely);
+        return result.get(0);
+    }
 
     public int updateBooking(int id, int jarat_id, int jegykategoria_id, int ulohely){
         return jdbcTemplate.update("UPDATE FOGLALAS SET jarat_id = ?, jegykategoria_id = ?, ulohely = ? WHERE id = ?",

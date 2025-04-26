@@ -1,4 +1,5 @@
 package com.adatb.repjegy_fogalas.DAO;
+import com.adatb.repjegy_fogalas.Model.Booking;
 import com.adatb.repjegy_fogalas.Model.Ticket;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,6 +39,11 @@ public class TicketDAO {
     }
     public int deleteTicket(int jarat_id, int ulohely){
         return jdbcTemplate.update("DELETE FROM JEGYEK WHERE jarat_id = ? AND ulohely = ?", jarat_id, ulohely);
+    }
+
+    public List<Ticket> userTicket(String email){
+        List<Ticket> result = jdbcTemplate.query("SELECT * FROM FOGLALAS WHERE email = ?",new TicketDAO.TicketRowMapper(), email);
+        return result;
     }
 
     public static class TicketRowMapper implements RowMapper<Ticket>{
