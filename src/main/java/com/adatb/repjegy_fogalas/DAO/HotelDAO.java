@@ -38,6 +38,11 @@ public class HotelDAO {
         return jdbcTemplate.update("DELETE FROM SZALLODAK WHERE id = ?", id);
     }
 
+    public List<Hotel> getHotelByTownId(int townId){
+        List<Hotel> result = jdbcTemplate.query("SELECT * FROM SZALLODAK WHERE varos_id = ?",new HotelDAO.HotelRowMapper(), townId);
+        return result.isEmpty()? null : result;
+    }
+
     public static class HotelRowMapper implements RowMapper<Hotel>{
 
         @Override
