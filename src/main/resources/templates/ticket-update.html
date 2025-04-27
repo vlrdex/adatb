@@ -5,6 +5,9 @@
   <title>Title</title>
 </head>
 <body>
+<div>
+  <button onclick="window.location.href='/admin'">Vissza</button>
+</div>
 <form th:action="@{/admin/ticket/update/{flight_id}/{seat}(flight_id=${ticket.flightId}, seat=${ticket.seat})}" method="post">
 
   <label for="newSeat">Ülőhely:</label>

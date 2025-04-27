@@ -5,6 +5,9 @@
     <title>Title</title>
 </head>
 <body>
+<div>
+    <button onclick="window.location.href='/admin'">Vissza</button>
+</div>
 <form th:action="@{/admin/plane/update/{plane_id}(plane_id=${plane.id})}" method="post">
 
     <label for="model">Repülő modellje neve:</label>

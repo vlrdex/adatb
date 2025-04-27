@@ -5,6 +5,9 @@
     <title>Title</title>
 </head>
 <body>
+<div>
+    <button onclick="window.location.href='/admin'">Vissza</button>
+</div>
 <form th:action="@{/admin/town/update/{town_id}(town_id=${town.id})}" method="post">
     <label for="name">Neve:</label>
     <input type="text" id="name" name="name" th:value="${town.name}" required><br>
