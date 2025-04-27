@@ -22,19 +22,19 @@
             <li>
                 <a href="/">Index</a>
             </li>
-            <li>
+            <li sec:authorize="!isAuthenticated()">
                 <a href="/login">Login</a>
             </li>
-            <li>
+            <li sec:authorize="!isAuthenticated()">
                 <a href="/regist">Regist</a>
             </li>
-            <li>
+            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
                 <a href="/admin">Admin</a>
             </li>
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <a href="/profil">Profil</a>
             </li>
-            <li>
+            <li sec:authorize="isAuthenticated()">
                 <a href="/ticket">Ticket</a>
             </li>
         </ul>
