@@ -332,7 +332,7 @@ public class AdminController {
                               @RequestParam("landingTown") int landingTown,
                               @RequestParam("landingTime") LocalDateTime landingTime,
                               @RequestParam("planeId") int planeId,
-                              @RequestParam("price") int price) {
+                              @RequestParam("price") int price){
         flightDAO.updateFlight(flight_id, startingTown, startingTime, landingTown, landingTime, planeId, price);
         return "redirect:/admin";
     }
@@ -343,12 +343,19 @@ public class AdminController {
         return "flight-create";
     }
     @PostMapping(value = "/admin/flight/createflight")
-    public String createHotel(@RequestParam("startingTown") int startingTown,
+    public String createFlight(@RequestParam("startingTown") int startingTown,
                               @RequestParam("startingTime") LocalDateTime startingTime,
                               @RequestParam("landingTown") int landingTown,
                               @RequestParam("landingTime") LocalDateTime landingTime,
                               @RequestParam("planeId") int planeId,
-                              @RequestParam("price") int price) {
+                              @RequestParam("price") int price,
+                               RedirectAttributes redirectAttributes) {
+
+        if(landingTime.isBefore(startingTime)){
+            //felhasználo büntetése hogy fogyatékos volt irjaon be ujra mindent
+            redirectAttributes.addFlashAttribute("error","Hibás időpontok");
+            return "redirect:/admin/flight/createflight";
+        }
         flightDAO.createFlight(startingTown, startingTime, landingTown, landingTime, planeId, price);
         return "redirect:/admin";
     }
