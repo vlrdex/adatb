@@ -12,7 +12,6 @@
 
     <label for="flightId">Járat:</label>
     <select id="flightId" name="flightId">
-        <option value="" disabled selected>Válasz járatot</option>
         <option th:each="flight: ${flight}"
                 th:value="${flight.id}"
                 th:text="${flight.id}">
@@ -22,7 +21,6 @@
     <input type="number" id="seat" name="seat" required><br><br>
     <label for="insuranceId">Biztosítás:</label>
     <select id="insuranceId" name="insuranceId">
-        <option value="" disabled selected>Válasz biztosítást</option>
         <option th:each="insurance: ${insurance}"
                 th:value="${insurance.id}"
                 th:text="${insurance.name}">
@@ -32,7 +30,6 @@
     <input type="text" id="name" name="name" maxlength="100" required><br><br>
     <label for="email">Email:</label>
     <select id="email" name="email">
-        <option value="" disabled selected>Válasz emailt</option>
         <option th:each="user: ${user}"
                 th:value="${user.email}"
                 th:text="${user.email}">

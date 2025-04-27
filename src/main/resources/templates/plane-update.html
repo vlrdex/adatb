@@ -12,8 +12,7 @@
 
     <label for="model">Repülő modellje neve:</label>
     <select id="model" name="model">
-<!--        TODO: Lekérdezni a repülő nevét (nem fontos)-->
-        <option th:value="${plane.model}" selected th:text="${plane.model}"></option>
+        <option th:value="${plane.model}" selected th:text="${plane.model + ' (jelenlegi)'}"></option>
         <option th:each="planemodel: ${planemodel}"
                 th:value="${planemodel.model}"
                 th:text="${planemodel.name}">

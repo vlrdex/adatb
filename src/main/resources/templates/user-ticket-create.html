@@ -39,7 +39,6 @@
 
     <label for="ticketCategoryId">Biztosítás:</label>
     <select id="ticketCategoryId" name="ticketCategoryId">
-        <option value="" disabled selected>Válasz jegykategóriát</option>
         <option th:each="ticketcategory: ${ticketcategory}"
                 th:value="${ticketcategory.id}"
                 th:text="${ticketcategory.name}">
@@ -47,7 +46,6 @@
     </select>
     <label for="insuranceId">Biztosítás:</label>
     <select id="insuranceId" name="insuranceId">
-        <option value="" disabled selected>Válasz biztosítást</option>
         <option th:each="insurance: ${insurance}"
                 th:value="${insurance.id}"
                 th:text="${insurance.name}">

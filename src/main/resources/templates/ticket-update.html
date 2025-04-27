@@ -14,14 +14,14 @@
   <input type="number" id="newSeat" name="newSeat" th:value="${ticket.seat}" required><br><br>
   <label for="insuranceId">Indulási város:</label>
   <select id="insuranceId" name="insuranceId">
-    <option th:text="${ticket.insuranceId} "th:value="${ticket.insuranceId}" selected></option>
+    <option th:text="${ticket.insuranceId} "th:value="${ticket.insuranceId + ' (jelenlegi)'}" selected></option>
     <option th:each="insurance: ${insurance}"
             th:value="${insurance.id}"
             th:text="${insurance.name}">
     </option>
   </select>
   <label for="name">Ár:</label>
-  <input type="text" id="name" name="name" maxlength="100" th:value="${ticket.name}" required><br><br>
+  <input type="text" id="name" name="name" maxlength="100" th:value="${ticket.name + ' (jelenlegi)'}" required><br><br>
   <label for="email">Email:</label>
   <select id="email" name="email">
     <option th:text="${ticket.email}" th:value="${ticket.email}" selected></option>

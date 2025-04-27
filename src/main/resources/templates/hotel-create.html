@@ -14,7 +14,6 @@
     <input type="text" id="name" name="name" maxlength="100" required><br><br>
     <label for="townId">Városa:</label>
     <select id="townId" name="townId">
-        <option value="" disabled selected>Válasz várost</option>
         <option th:each="town: ${town}"
                 th:value="${town.id}"
                 th:text="${town.name}">

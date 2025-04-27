@@ -11,9 +11,9 @@
 <form th:action="@{/admin/insurance/update/{insurance_id}(insurance_id=${insurance.id})}" method="post">
     <label for="name">Neve:</label>
     <input type="text" id="name" name="name" th:value="${insurance.name}" required><br>
-    <label for="cost">Neve:</label>
+    <label for="cost">Ára:</label>
     <input type="text" id="cost" name="cost" th:value="${insurance.cost}" required><br>
-    <label for="description">Neve:</label>
+    <label for="description">Leírása:</label>
     <input type="text" id="description" name="description" th:value="${insurance.description}" required><br>
 
     <button type="submit">Biztosítás módosítása</button>

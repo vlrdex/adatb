@@ -146,7 +146,7 @@ CREATE TABLE JEGYEK (
 CREATE TABLE FOGLALAS (
     id INTEGER PRIMARY KEY,
     jarat_id INTEGER NOT NULL,
-    jegykategoria_id INTEGER NOT NULL,
+    jegykategoria_id INTEGER,
     ulohely INTEGER NOT NULL,
     CONSTRAINT fk_jarat_foglalas FOREIGN KEY (jarat_id) REFERENCES JARATOK (id),
     CONSTRAINT fk_jegykategoria FOREIGN KEY (jegykategoria_id) REFERENCES JEGYKATEGORIA (id),
@@ -181,15 +181,15 @@ INSERT INTO JEGYKATEGORIA (id, nev, kedvezmeny) VALUES (4, 'Premium Economy', 30
 INSERT INTO JEGYKATEGORIA (id, nev, kedvezmeny) VALUES (5, 'Economy Plus', 25);
 
 INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES
-('user1@example.com', 'Péter Kovács', 'password123', TO_DATE('1990-05-10', 'YYYY-MM-DD'), 1);
+('user1@example.com', 'Péter Kovács', '$2a$10$G8Pvwr5C5rnNjDgX7Qu4e.r4l0WAUqlxgCv04c3loyA3TvrObo6Ga', TO_DATE('1990-05-10', 'YYYY-MM-DD'), 1);
 INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES
-('user2@example.com', 'Anna Horváth', 'password456', TO_DATE('1985-11-20', 'YYYY-MM-DD'), 0);
+('user2@example.com', 'Anna Horváth', '$2a$10$G8Pvwr5C5rnNjDgX7Qu4e.r4l0WAUqlxgCv04c3loyA3TvrObo6Ga', TO_DATE('1985-11-20', 'YYYY-MM-DD'), 0);
 INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES
-('user3@example.com', 'János Kiss', 'password789', TO_DATE('1992-03-15', 'YYYY-MM-DD'), 1);
+('user3@example.com', 'János Kiss', '$2a$10$G8Pvwr5C5rnNjDgX7Qu4e.r4l0WAUqlxgCv04c3loyA3TvrObo6Ga', TO_DATE('1992-03-15', 'YYYY-MM-DD'), 1);
 INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES
-('user4@example.com', 'László Tóth', 'password321', TO_DATE('1995-07-25', 'YYYY-MM-DD'), 0);
+('user4@example.com', 'László Tóth', '$2a$10$G8Pvwr5C5rnNjDgX7Qu4e.r4l0WAUqlxgCv04c3loyA3TvrObo6Ga', TO_DATE('1995-07-25', 'YYYY-MM-DD'), 0);
 INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES
-('user5@example.com', 'Mária Nagy', 'password654', TO_DATE('1988-02-18', 'YYYY-MM-DD'), 1);
+('user5@example.com', 'Mária Nagy', '$2a$10$G8Pvwr5C5rnNjDgX7Qu4e.r4l0WAUqlxgCv04c3loyA3TvrObo6Ga', TO_DATE('1988-02-18', 'YYYY-MM-DD'), 1);
 
 INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
 (1, 'Lufthansa', 'Boeing_737');
@@ -264,10 +264,16 @@ END;
 CREATE OR REPLACE TRIGGER modell_delete_set_null
 BEFORE DELETE ON MODELL
 FOR EACH ROW
+DECLARE
+    v_count NUMBER;
 BEGIN
-    UPDATE REPULOGEP
-    SET modell = NULL
-    WHERE modell = :OLD.modell;
+    SELECT COUNT(*) INTO v_count 
+    FROM REPULOGEP R 
+    WHERE R.modell = :OLD.modell;
+    
+    IF v_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Nem törölhető a modell, mert repologep kapcsolódnak hozzá!');
+    END IF;
 END;
 /
 

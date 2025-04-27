@@ -16,7 +16,6 @@
     <input type="datetime-local" id="landingTime" name="landingTime" required><br><br>
     <label for="startingTown">Indulási város:</label>
     <select id="startingTown" name="startingTown">
-        <option value="" disabled selected>Válasz várost</option>
         <option th:each="town: ${town}"
                 th:value="${town.id}"
                 th:text="${town.name}">
@@ -24,7 +23,6 @@
     </select>
     <label for="landingTown">Érkezési város:</label>
     <select id="landingTown" name="landingTown">
-        <option value="" disabled selected>Válasz várost</option>
         <option th:each="town: ${town}"
                 th:value="${town.id}"
                 th:text="${town.name}">
@@ -32,7 +30,6 @@
     </select>
     <label for="planeId">Repülő:</label>
     <select id="planeId" name="planeId">
-        <option value="" disabled selected>Válasz repülőt</option>
         <option th:each="plane: ${plane}"
                 th:value="${plane.id}"
                 th:text="${plane.model}">

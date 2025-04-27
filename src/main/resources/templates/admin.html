@@ -42,6 +42,9 @@
 </header>
 <body>
 <div>
+    <p th:text="${error}"></p>
+</div>
+<div>
     <form th:action="@{'/admin/town/createtown'}" method="get">
         <button type="submit">Új város</button>
     </form>

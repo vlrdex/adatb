@@ -12,7 +12,6 @@
 
     <label for="model">Repülő modellje neve:</label>
     <select id="model" name="model">
-        <option value="" disabled selected>Válasz modelt</option>
         <option th:each="planemodel: ${planemodel}"
         th:value="${planemodel.model}"
         th:text="${planemodel.name}">

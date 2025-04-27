@@ -12,7 +12,7 @@
 
     <label for="flight_id">Járat:</label>
     <select id="flight_id" name="flight_id">
-        <option th:text="${booking.flight_id}" th:value="${booking.flight_id}" selected>Válasz járatot</option>
+        <option th:text="${booking.flight_id}" th:value="${booking.flight_id + ' (jelenlegi)'}" selected>Válasz járatot</option>
         <option th:each="flight: ${flight}"
                 th:value="${flight.id}"
                 th:text="${flight.id}">
@@ -20,7 +20,7 @@
     </select>
     <label for="ticket_category_id">Jegykategória:</label>
     <select id="ticket_category_id" name="ticket_category_id">
-        <option th:text="${booking.ticket_category_id}" th:value="${booking.ticket_category_id}" selected>Válasz járatot</option>
+        <option th:text="${booking.ticket_category_id}" th:value="${booking.ticket_category_id + ' (jelenlegi)'}" selected>Válasz járatot</option>
         <option th:each="ticketcategory: ${ticketcategory}"
                 th:value="${ticketcategory.id}"
                 th:text="${ticketcategory.name}">

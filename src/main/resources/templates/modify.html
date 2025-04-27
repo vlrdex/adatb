@@ -38,7 +38,7 @@
     <br><br>
 
     <label for="birthdate">Születési dátum:</label>
-    <input type="date" th:value="${user.getBirthDate()}" id="birthdate" name="birthdate" required>
+    <input type="date" th:value="${user.getBirthDate().split(' ')[0]}" id="birthdate" name="birthdate" required>
     <br><br>
 
     <button type="submit">Modoít!</button>

@@ -3,13 +3,16 @@ package com.adatb.repjegy_fogalas.Controller;
 import com.adatb.repjegy_fogalas.DAO.*;
 import com.adatb.repjegy_fogalas.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @Controller
@@ -43,17 +46,31 @@ public class AdminController {
         model.addAttribute("planemodel", planeModelDAO.readAllPlane_Model());
         model.addAttribute("plane", planeDAO.readAllPlane());
         model.addAttribute("hotel", hotelDAO.readAllHotel());
-        model.addAttribute("flight", flightDAO.readAllFlight());
+        model.addAttribute("flight", flightDAO.readAllFlightNice());
         model.addAttribute("ticket", ticketDAO.readAllTicket());
         model.addAttribute("booking", bookingDAO.readAllBooking());
         return "admin";
     }
 
     @PostMapping(value = "admin/town/delete/{town_id}")
-    public String deleteTown(@PathVariable("town_id") int town_id){
-        townDAO.deleteTown(town_id);
+    public String deleteTown(@PathVariable("town_id") int town_id, RedirectAttributes redirectAttributes){
+        try {
+            townDAO.deleteTown(town_id);
+        } catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null && message.contains("ORA-20001")) {
+                    // Az ORA-20001 hibát (trigger dobta) elkapjuk
+                    String error = "Nem törölhető a város, mert járatok kapcsolódnak hozzá!";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin";
+                }
+            }
+        }
         return "redirect:/admin";
     }
+
     @GetMapping("/admin/town/update/{town_id}")
     public String updateTown(@PathVariable("town_id") int town_id, Model model) {
         Town town = townDAO.getTownById(town_id);
@@ -151,8 +168,21 @@ public class AdminController {
 
 
     @PostMapping(value = "admin/planemodel/delete/{planemodel_id}")
-    public String deletePlaneModel(@PathVariable("planemodel_id") String planemodel_id){
-        planeModelDAO.deletePlane_Model(planemodel_id);
+    public String deletePlaneModel(@PathVariable("planemodel_id") String planemodel_id, RedirectAttributes redirectAttributes){
+        try{
+            planeModelDAO.deletePlane_Model(planemodel_id);
+        }catch (DataAccessException ex){
+        Throwable rootCause = ex.getCause();
+        if (rootCause instanceof SQLException) {
+            String message = rootCause.getMessage();
+            if (message != null && message.contains("ORA-20003")) {
+                // Az ORA-20001 hibát (trigger dobta) elkapjuk
+                String error = "Nem törölhető a modell, mert repülögép kapcsolódnak hozzá!";
+                redirectAttributes.addFlashAttribute("error", error);
+                return "redirect:/admin";
+            }
+        }
+    }
         return "redirect:/admin";
     }
     @GetMapping("/admin/planemodel/update/{planemodel_id}")
@@ -186,8 +216,21 @@ public class AdminController {
 
 
     @PostMapping(value = "admin/plane/delete/{plane_id}")
-    public String deletePlane(@PathVariable("plane_id") int plane_id){
-        planeDAO.deletePlane(plane_id);
+    public String deletePlane(@PathVariable("plane_id") int plane_id , RedirectAttributes redirectAttributes){
+        try{
+            planeDAO.deletePlane(plane_id);
+        }catch (DataAccessException ex){
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null && message.contains("ORA-20002")) {
+                    // Az ORA-20001 hibát (trigger dobta) elkapjuk
+                    String error = "Nem törölhető a repülőgép, mert járatok kapcsolódnak hozzá!";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin";
+                }
+            }
+        }
         return "redirect:/admin";
     }
     @GetMapping("/admin/plane/update/{plane_id}")

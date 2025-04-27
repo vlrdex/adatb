@@ -42,7 +42,7 @@
   <div>
     <p th:text="${user.getName()}"></p>
     <p th:text="${user.getEmail()}"></p>
-    <p th:text="${user.getBirthDate()}"></p>
+    <p th:text="${user.getBirthDate().split(' ')[0]}"></p>
   </div>
     <form th:action="@{/modify}" method="get">
         <button type="submit">Modositás</button>

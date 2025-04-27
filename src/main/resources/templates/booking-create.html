@@ -12,7 +12,6 @@
 
     <label for="flight_id">Járat:</label>
     <select id="flight_id" name="flight_id">
-        <option value="" disabled selected>Válasz járatot</option>
         <option th:each="flight: ${flight}"
                 th:value="${flight.id}"
                 th:text="${flight.id}">
@@ -20,7 +19,6 @@
     </select>
     <label for="ticket_category_id">Jegykategória:</label>
     <select id="ticket_category_id" name="ticket_category_id">
-        <option value="" disabled selected>Válasz jegykategóriát</option>
         <option th:each="ticketcategory: ${ticketcategory}"
                 th:value="${ticketcategory.id}"
                 th:text="${ticketcategory.name}">

@@ -16,7 +16,7 @@
     <input type="datetime-local" id="landingTime" name="landingTime" th:value="${flight.landingTime}" required><br><br>
     <label for="startingTown">Indulási város:</label>
     <select id="startingTown" name="startingTown">
-        <option th:text="${starttown.name} "th:value="${flight.startingTown}" selected></option>
+        <option th:text="${starttown.name} "th:value="${flight.startingTown + ' (jelenlegi)'}" selected></option>
         <option th:each="town: ${town}"
                 th:value="${town.id}"
                 th:text="${town.name}">
@@ -24,7 +24,7 @@
     </select>
     <label for="landingTown">Érkezési város:</label>
     <select id="landingTown" name="landingTown">
-        <option th:text="${endtown.name}" th:value="${flight.landingTown}" selected></option>
+        <option th:text="${endtown.name}" th:value="${flight.landingTown + ' (jelenlegi)'}" selected></option>
         <option th:each="town: ${town}"
                 th:value="${town.id}"
                 th:text="${town.name}">
@@ -32,7 +32,7 @@
     </select>
     <label for="planeId">Repülő:</label>
     <select id="planeId" name="planeId">
-        <option th:text="${thatplane.model}" th:value="${flight.planeId}" selected></option>
+        <option th:text="${thatplane.model}" th:value="${flight.planeId + ' (jelenlegi)'}" selected></option>
         <option th:each="plane: ${plane}"
                 th:value="${plane.id}"
                 th:text="${plane.model}">
