@@ -49,6 +49,8 @@ public class AdminController {
         model.addAttribute("flight", flightDAO.readAllFlightNice());
         model.addAttribute("ticket", ticketDAO.readAllTicket());
         model.addAttribute("booking", bookingDAO.readAllBooking());
+
+        model.addAttribute("towntotownWeek", flightDAO.getFlightDataTownToTownWeek());
         return "admin";
     }
 

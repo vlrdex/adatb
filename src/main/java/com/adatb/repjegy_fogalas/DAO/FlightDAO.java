@@ -1,5 +1,6 @@
 package com.adatb.repjegy_fogalas.DAO;
 import com.adatb.repjegy_fogalas.Model.Flight;
+import com.adatb.repjegy_fogalas.Model.FlightDataTownToTown;
 import com.adatb.repjegy_fogalas.Model.FlightNice;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -37,6 +40,52 @@ public class FlightDAO {
     public Flight getFlightById(int id){
         List<Flight> result = jdbcTemplate.query("SELECT * FROM JARATOK WHERE id = ?",new FlightDAO.FlightRowMapper(), id);
         return result.get(0);
+    }
+
+    public List<FlightDataTownToTown> getFlightDataTownToTownWeek(){
+        List<FlightDataTownToTown> result = jdbcTemplate.query("SELECT TRUNC(JARATOK.KIINDULASI_IDOPONT, 'IW') AS TIME, BE.NEV AS STARTINGTOWN, " +
+                "KI.NEV AS LANDINGTOWN, COUNT(*) AS COUNT " +
+                "FROM JARATOK " +
+                "JOIN VAROS BE ON JARATOK.KIINDULASI_HELY = BE.ID " +
+                "JOIN VAROS KI ON JARATOK.ERKEZESI_HELY = KI.ID " +
+                "GROUP BY TRUNC(JARATOK.KIINDULASI_IDOPONT, 'IW'), BE.NEV, KI.NEV " +
+                "ORDER BY TIME, STARTINGTOWN, LANDINGTOWN",new FlightDAO.FlightDataTownToTownRowMapper());
+        return result.isEmpty()? null : result;
+    }
+
+    public List<FlightDataTownToTown> getFlightDataTownToTownMonth(){
+        List<FlightDataTownToTown> result = jdbcTemplate.query("SELECT TRUNC(JARATOK.KIINDULASI_IDOPONT, 'MM') AS TIME, BE.NEV AS STARTINGTOWN, " +
+                "KI.NEV AS LANDINGTOWN, COUNT(*) AS COUNT " +
+                "FROM JARATOK " +
+                "JOIN VAROS BE ON JARATOK.KIINDULASI_HELY = BE.ID " +
+                "JOIN VAROS KI ON JARATOK.ERKEZESI_HELY = KI.ID " +
+                "GROUP BY TRUNC(JARATOK.KIINDULASI_IDOPONT, 'MM'), BE.NEV, KI.NEV " +
+                "ORDER BY TIME, STARTINGTOWN, LANDINGTOWN",new FlightDAO.FlightDataTownToTownRowMapper());
+        return result.isEmpty()? null : result;
+    }
+
+    public List<FlightDataTownToTown> getFlightDataTownToTownPeoplesWeek(){
+        List<FlightDataTownToTown> result = jdbcTemplate.query("SELECT TRUNC(JARATOK.KIINDULASI_IDOPONT, 'IW') AS TIME, BE.NEV AS STARTINGTOWN, " +
+                "KI.NEV AS LANDINGTOWN, COUNT(FOGLALAS.ID) AS COUNT " +
+                "FROM JARATOK " +
+                "JOIN VAROS BE ON JARATOK.KIINDULASI_HELY = BE.ID " +
+                "JOIN VAROS KI ON JARATOK.ERKEZESI_HELY = KI.ID " +
+                "JOIN FOGLALAS ON JARATOK.ID = FOGLALAS.JARAT_ID " +
+                "GROUP BY TRUNC(JARATOK.KIINDULASI_IDOPONT, 'IW'), BE.NEV, KI.NEV " +
+                "ORDER BY TIME, STARTINGTOWN, LANDINGTOWN",new FlightDAO.FlightDataTownToTownRowMapper());
+        return result.isEmpty()? null : result;
+    }
+
+    public List<FlightDataTownToTown> getFlightDataTownToTownPeoplesMonth(){
+        List<FlightDataTownToTown> result = jdbcTemplate.query("SELECT TRUNC(JARATOK.KIINDULASI_IDOPONT, 'MM') AS TIME, BE.NEV AS STARTINGTOWN, " +
+                "KI.NEV AS LANDINGTOWN, COUNT(FOGLALAS.ID) AS COUNT " +
+                "FROM JARATOK " +
+                "JOIN VAROS BE ON JARATOK.KIINDULASI_HELY = BE.ID " +
+                "JOIN VAROS KI ON JARATOK.ERKEZESI_HELY = KI.ID " +
+                "JOIN FOGLALAS ON JARATOK.ID = FOGLALAS.JARAT_ID " +
+                "GROUP BY TRUNC(JARATOK.KIINDULASI_IDOPONT, 'MM'), BE.NEV, KI.NEV " +
+                "ORDER BY TIME, STARTINGTOWN, LANDINGTOWN",new FlightDAO.FlightDataTownToTownRowMapper());
+        return result.isEmpty()? null : result;
     }
 
     public int updateFlight(int id, int kiinduasi_hely, LocalDateTime kiindulasi_idopont, int erkezesi_hely, LocalDateTime erkezesi_idopont, int repulo_id, int ar){
@@ -77,6 +126,20 @@ public class FlightDAO {
                     .landingTime(rs.getObject("BE_IP",LocalDateTime.class))
                     .planeId(rs.getString("REP"))
                     .price(rs.getInt("AR"))
+                    .build();
+        }
+    }
+
+
+    public static  class  FlightDataTownToTownRowMapper implements RowMapper<FlightDataTownToTown>{
+
+        @Override
+        public FlightDataTownToTown mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return FlightDataTownToTown.builder()
+                    .time(rs.getObject("TIME", LocalDateTime.class))
+                    .startingTown(rs.getString("STARTINGTOWN"))
+                    .landingTown(rs.getString("LANDINGTOWN"))
+                    .count(rs.getInt("COUNT"))
                     .build();
         }
     }
