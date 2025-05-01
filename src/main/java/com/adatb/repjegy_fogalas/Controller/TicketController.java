@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class TicketController {
 
     @GetMapping("/ticket")
     public String ticket(Model model){
+        model.addAttribute("city",townDAO.readAllTown());
         model.addAttribute("customflight", customFlightDAO.readAllCustom_Flight());
         return "ticket";
 
@@ -62,6 +64,15 @@ public class TicketController {
 
         return "user-ticket-create";
     }
+
+    @PostMapping("/ticket/search")
+    public String search(RedirectAttributes model,
+                         @RequestParam("nap") String date,
+                         @RequestParam("be_hely") int be_hely, @RequestParam("ki_hely") int ki_hely){
+        model.addAttribute("searchResult",flightDAO.serch(ki_hely,be_hely,date));
+        return "redirect:/ticket";
+    }
+
     @PostMapping("/ticket/create/{flight_id}")
     public String createTicket(@PathVariable("flight_id") int flight_id,
                                @RequestParam("ticketCategoryId") int ticketCategoryId,

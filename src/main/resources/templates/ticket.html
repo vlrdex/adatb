@@ -38,10 +38,20 @@
 </header>
 <body>
 <div>
-    <form th:action="@{'/ticket'}" method="get">
+    <form th:action="@{'/ticket/search'}" method="get">
+        <label for="nap">Datum:</label>
+        <input type="date" required name="nap" id="nap">
+        <label for="ki_hely">Kindulási hely</label>
+        <select name="ki_hely" id="ki_hely">
+           <option th:each="city : ${city}" th:value="${c.id}" th:text="${c.name}"></option>
+        </select>
+        <label for="be_hely">Érkezési hely:</label>
+        <select name="be_hely" id="be_hely">
+            <option th:each="city : ${city}" th:value="${c.id}" th:text="${c.name}"></option>
+        </select>
         <button type="submit">Keresés </button>
     </form>
-    <table>
+    <table th:if="${searchResult==null || searchResult.isEmpty()}">
         <thead>
         <tr>
             <th>Járat ID</th>
@@ -53,7 +63,7 @@
             <th>Ár</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody th:if="${ customflight!=null && !customflight.isEmpty() }">
         <tr th:each="customflight: ${customflight}">
             <td th:text="${customflight.flightId}"></td>
             <td th:text="${customflight.startingTown}"></td>
@@ -68,6 +78,11 @@
                 </form>
             </td>
         </tr>
+        </tbody>
+        <tbody th:if="${searchResult!=null}">
+            <tr th:if="${searchResult.isEmpty()}">
+                <td>Nincs ilyen járat</td>
+            </tr>
         </tbody>
     </table>
 

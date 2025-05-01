@@ -2,8 +2,12 @@ package com.adatb.repjegy_fogalas.DAO;
 import com.adatb.repjegy_fogalas.Model.Flight;
 import com.adatb.repjegy_fogalas.Model.FlightDataTownToTown;
 import com.adatb.repjegy_fogalas.Model.FlightNice;
+import com.adatb.repjegy_fogalas.Model.Serch_Result;
+import jakarta.annotation.PostConstruct;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -16,6 +20,14 @@ import java.util.List;
 @Component
 public class FlightDAO {
     private final JdbcTemplate jdbcTemplate;
+    private SimpleJdbcCall jdbcCall;
+
+    @PostConstruct
+    public void init() {
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("kereses")
+                .returningResultSet("p_cursor", new SerchResultRowMapper());
+    }
 
     public FlightDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -94,6 +106,22 @@ public class FlightDAO {
                 " repulo_id = ?, ar = ? WHERE id = ?",
                 kiinduasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar, id);
     }
+
+    public List<Serch_Result> serch(int ki_hely,int be_hely,String date){
+        MapSqlParameterSource inParams = new MapSqlParameterSource()
+                .addValue("nap", date)
+                .addValue("ki_hely", ki_hely)
+                .addValue("be_hely",be_hely);
+
+        List<Serch_Result> result=(List<Serch_Result>)jdbcCall.execute(inParams).get("p_cursor");
+
+        for (Serch_Result a:result){
+            a.setFirst_flight(getFlightById(a.getFirst_id()));
+            a.setFirst_flight(getFlightById(a.getSecond_id()));
+        }
+
+        return result;
+    }
     public int deleteFlight(int id){
         return jdbcTemplate.update("DELETE FROM JARATOK WHERE id = ?", id);
     }
@@ -140,6 +168,17 @@ public class FlightDAO {
                     .startingTown(rs.getString("STARTINGTOWN"))
                     .landingTown(rs.getString("LANDINGTOWN"))
                     .count(rs.getInt("COUNT"))
+                    .build();
+        }
+    }
+
+    public static class SerchResultRowMapper implements RowMapper<Serch_Result>{
+
+        @Override
+        public Serch_Result mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return Serch_Result.builder()
+                    .first_id(rs.getInt("FIRST"))
+                    .second_id(rs.getInt("SECOND"))
                     .build();
         }
     }

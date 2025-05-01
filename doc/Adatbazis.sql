@@ -618,3 +618,25 @@ END;
 /
 
 ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS';
+
+
+CREATE OR REPLACE PROCEDURE kereses(nap IN VARCHAR2, ki_hely IN NUMBER, be_hely IN NUMBER ,p_cursor OUT SYS_REFCURSOR) AS
+    cnt NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO cnt 
+    FROM JARATOK J 
+    WHERE TRUNC(J.kiindulasi_idopont) = TRUNC(TO_DATE(nap,'YYYY-MM-DD HH24:MI:SS'))
+        AND J.kiindulasi_hely = ki_hely 
+        AND J.erkezesi_hely = be_hely;
+        
+    IF cnt=0 THEN
+        OPEN p_cursor FOR SELECT J1.id As first,J2.id as second FROM JARATOK J1, JARATOK J2 
+                WHERE J1.erkezesi_hely=J2.kiindulasi_hely AND TRUNC(J1.kiindulasi_idopont)=TRUNC(J2.kiindulasi_idopont) 
+                AND J1.erkezesi_idopont - TRUNC(J1.erkezesi_idopont) < J2.kiindulasi_idopont - TRUNC(J2.kiindulasi_idopont)
+                 AND TRUNC(J1.kiindulasi_idopont) = TRUNC(TO_DATE(nap,'YYYY-MM-DD HH24:MI:SS')) AND J1.kiindulasi_hely=ki_hely AND J2.erkezesi_hely=be_hely;
+    Else
+        OPEN p_cursor FOR SELECT J.id As first,J.id as second FROM JARATOK J WHERE TRUNC(J.kiindulasi_idopont) = TRUNC(TO_DATE(nap,'YYYY-MM-DD HH24:MI:SS')) AND J.kiindulasi_hely=ki_hely AND J.erkezesi_hely=be_hely;
+    END if;
+        
+END;
+
