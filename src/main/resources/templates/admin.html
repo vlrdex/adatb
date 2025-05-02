@@ -372,5 +372,25 @@
     </table>
 
 </div>
+
+<div>
+    <div>
+        <p>Felhasználoknak hány jegye van</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>jegyszám</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="userstat : ${userstat}">
+                <td th:text="${userstat.getEmail()}"></td>
+                <td th:text="${userstat.getDb()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

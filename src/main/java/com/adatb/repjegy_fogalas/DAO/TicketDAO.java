@@ -1,8 +1,13 @@
 package com.adatb.repjegy_fogalas.DAO;
 import com.adatb.repjegy_fogalas.Model.Booking;
 import com.adatb.repjegy_fogalas.Model.Ticket;
+import com.adatb.repjegy_fogalas.Model.User_stat;
+import jakarta.annotation.PostConstruct;
+import org.apache.catalina.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -12,6 +17,15 @@ import java.util.List;
 @Component
 public class TicketDAO {
     private final JdbcTemplate jdbcTemplate;
+    private SimpleJdbcCall jdbcCall;
+
+    @PostConstruct
+    public void init() {
+        jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("foglalas_statisztika")
+                .returningResultSet("p_cursor", new StatRowMapper())
+                .withoutProcedureColumnMetaDataAccess();
+    }
 
     public TicketDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -46,8 +60,11 @@ public class TicketDAO {
         return result;
     }
 
-    public static class TicketRowMapper implements RowMapper<Ticket>{
+    public List<User_stat> ticketNumberForUsers(){
+        return (List<User_stat>) jdbcCall.execute().get("p_cursor");
+    }
 
+    public static class TicketRowMapper implements RowMapper<Ticket>{
         @Override
         public Ticket mapRow(ResultSet rs, int rowNum) throws SQLException {
             return Ticket.builder()
@@ -56,6 +73,16 @@ public class TicketDAO {
                     .insuranceId(rs.getInt("BIZTOSITAS_ID"))
                     .name(rs.getString("NEV"))
                     .email(rs.getString("EMAIL"))
+                    .build();
+        }
+    }
+
+    private static class StatRowMapper implements RowMapper<User_stat>{
+        @Override
+        public User_stat mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return User_stat.builder()
+                    .email(rs.getString("EMAIL"))
+                    .db(rs.getInt("DARAB"))
                     .build();
         }
     }
