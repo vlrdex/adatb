@@ -640,3 +640,14 @@ BEGIN
         
 END;
 
+CREATE OR REPLACE PROCEDURE foglalas_statisztika (
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT J.email as email, COUNT(*) AS darab
+        FROM JEGYEK J
+        GROUP BY J.email;
+END;
+
+
