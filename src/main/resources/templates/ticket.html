@@ -43,15 +43,15 @@
         <input type="date" required name="nap" id="nap">
         <label for="ki_hely">Kindulási hely</label>
         <select name="ki_hely" id="ki_hely">
-           <option th:each="city : ${city}" th:value="${c.id}" th:text="${c.name}"></option>
+           <option th:each="city : ${city}" th:value="${city.id}" th:text="${city.name}"></option>
         </select>
         <label for="be_hely">Érkezési hely:</label>
         <select name="be_hely" id="be_hely">
-            <option th:each="city : ${city}" th:value="${c.id}" th:text="${c.name}"></option>
+            <option th:each="city : ${city}" th:value="${city.id}" th:text="${city.name}"></option>
         </select>
         <button type="submit">Keresés </button>
     </form>
-    <table th:if="${searchResult==null || searchResult.isEmpty()}">
+    <table th:if="${(searchResult==null || searchResult.isEmpty()) && customflight!=null && !customflight.isEmpty()}">
         <thead>
         <tr>
             <th>Járat ID</th>
@@ -63,7 +63,7 @@
             <th>Ár</th>
         </tr>
         </thead>
-        <tbody th:if="${ customflight!=null && !customflight.isEmpty() }">
+        <tbody>
         <tr th:each="customflight: ${customflight}">
             <td th:text="${customflight.flightId}"></td>
             <td th:text="${customflight.startingTown}"></td>
@@ -79,12 +79,54 @@
             </td>
         </tr>
         </tbody>
-        <tbody th:if="${searchResult!=null}">
-            <tr th:if="${searchResult.isEmpty()}">
-                <td>Nincs ilyen járat</td>
-            </tr>
-        </tbody>
     </table>
+
+    <div th:if="${searchResult!=null && !searchResult.isEmpty()}" th:each="s : ${searchResult}">
+        <!--/*@thymesVar id="s" type="com.adatb.repjegy_fogalas.Model.Serch_Result"*/-->
+        <div th:if="${s.is_direct()}">
+            <p th:text="${'Id:' + s.getFirst_flight().getFlightId()}"></p>
+            <p th:text="${'Kiindulási város:' + s.getFirst_flight().getStartingTown()}"></p>
+            <p th:text="${'Érkezési város:' + s.getFirst_flight().getLandingTown()}"></p>
+            <p th:text="${'Érkezési város:' + s.getFirst_flight().getStartingTime()}"></p>
+            <p th:text="${'Érkezési idő:' + s.getFirst_flight().getLandingTown()}"></p>
+            <p th:text="${'Repülő ID:' + s.getFirst_flight().getPlaneId()}"></p>
+            <p th:text="${'Ár:' + s.getFirst_flight().getPrice()}"></p>
+            <form th:action="@{'/ticket/create/' + ${s.getFirst_id()}}" method="get">
+                <button type="submit">Foglalás</button>
+            </form>
+        </div>
+
+        <h2 th:if="${!s.is_direct()}">Átszálásos!</h2>
+        <div th:if="${!s.is_direct()}">
+            <p th:text="${'Id:' + s.getFirst_flight().getFlightId()}"></p>
+            <p th:text="${'Kiindulási város:' + s.getFirst_flight().getStartingTown()}"></p>
+            <p th:text="${'Érkezési város:' + s.getFirst_flight().getLandingTown()}"></p>
+            <p th:text="${'Érkezési város:' + s.getFirst_flight().getStartingTime()}"></p>
+            <p th:text="${'Érkezési idő:' + s.getFirst_flight().getLandingTown()}"></p>
+            <p th:text="${'Repülő ID:' + s.getFirst_flight().getPlaneId()}"></p>
+            <p th:text="${'Ár:' + s.getFirst_flight().getPrice()}"></p>
+            <form th:action="@{'/ticket/create/' + ${s.getFirst_id()}}" method="get">
+                <button type="submit">Foglalás</button>
+            </form>
+        </div>
+        <div th:if="${!s.is_direct()}">
+            <p th:text="${'Id:' + s.getSecond_flight().getFlightId()}"></p>
+            <p th:text="${'Kiindulási város:' + s.getSecond_flight().getStartingTown()}"></p>
+            <p th:text="${'Érkezési város:' + s.getSecond_flight().getLandingTown()}"></p>
+            <p th:text="${'Érkezési város:' + s.getSecond_flight().getStartingTime()}"></p>
+            <p th:text="${'Érkezési idő:' + s.getSecond_flight().getLandingTown()}"></p>
+            <p th:text="${'Repülő ID:' + s.getSecond_flight().getPlaneId()}"></p>
+            <p th:text="${'Ár:' + s.getSecond_flight().getPrice()}"></p>
+            <form th:action="@{'/ticket/create/' + ${s.getSecond_id()}}" method="get">
+                <button type="submit">Foglalás</button>
+            </form>
+        </div>
+        <hr>
+    </div>
+
+    <div th:if="${searchResult!=null && searchResult.isEmpty()}">
+        <p>Nincs ilyen járat</p>
+    </div>
 
 </div>
 </body>

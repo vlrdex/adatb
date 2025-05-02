@@ -4,6 +4,7 @@ import com.adatb.repjegy_fogalas.Model.FlightDataTownToTown;
 import com.adatb.repjegy_fogalas.Model.FlightNice;
 import com.adatb.repjegy_fogalas.Model.Serch_Result;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -21,6 +22,8 @@ import java.util.List;
 public class FlightDAO {
     private final JdbcTemplate jdbcTemplate;
     private SimpleJdbcCall jdbcCall;
+    @Autowired
+    private Custom_FlightDAO customFlightDAO;
 
     @PostConstruct
     public void init() {
@@ -116,8 +119,12 @@ public class FlightDAO {
         List<Serch_Result> result=(List<Serch_Result>)jdbcCall.execute(inParams).get("p_cursor");
 
         for (Serch_Result a:result){
-            a.setFirst_flight(getFlightById(a.getFirst_id()));
-            a.setFirst_flight(getFlightById(a.getSecond_id()));
+            a.setFirst_flight(customFlightDAO.getCustomFlightByFlightId(a.getFirst_id()));
+            if(a.is_direct()){
+                a.setSecond_flight(a.getFirst_flight());
+            }else{
+                a.setSecond_flight(customFlightDAO.getCustomFlightByFlightId(a.getSecond_id()));
+            }
         }
 
         return result;

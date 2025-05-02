@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class Serch_Result {
     int first_id;
     int second_id;
-    Flight first_flight;
-    Flight second_flight;
+    Custom_Flight first_flight;
+    Custom_Flight second_flight;
 
     public boolean is_direct(){
         return first_id==second_id;
