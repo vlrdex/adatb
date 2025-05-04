@@ -278,9 +278,6 @@
 
 </div>
 <div>
-    <form th:action="@{'/admin/ticket/createticket'}" method="get">
-        <button type="submit">Új jegy</button>
-    </form>
     <table>
         <thead>
         <tr>
@@ -314,9 +311,6 @@
 
 </div>
 <div>
-    <form th:action="@{'/admin/booking/createbooking'}" method="get">
-        <button type="submit">Új jegy</button>
-    </form>
     <table>
         <thead>
         <tr>
@@ -350,7 +344,7 @@
 
 <div>
     <div>
-        <p>Vársoból városba menő járatok száma</p>
+        <p>Vársoból városba menő járatok száma heti szinten</p>
     </div>
     <table>
         <thead>
@@ -367,6 +361,78 @@
             <td th:text="${towntotownWeek.startingTown}"></td>
             <td th:text="${towntotownWeek.landingTown}"></td>
             <td th:text="${towntotownWeek.count}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <div>
+        <p>Vársoból városba menő járatok száma havi szinten</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Hónap</th>
+            <th>Kiindulási Város</th>
+            <th>Érkezési Város</th>
+            <th>Járatok száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="towntotownMonth: ${towntotownMonth}">
+            <td th:text="${towntotownMonth.time}"></td>
+            <td th:text="${towntotownMonth.startingTown}"></td>
+            <td th:text="${towntotownMonth.landingTown}"></td>
+            <td th:text="${towntotownMonth.count}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <div>
+        <p>Vársoból városba menő emberek száma heti szinten</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Hét</th>
+            <th>Kiindulási Város</th>
+            <th>Érkezési Város</th>
+            <th>Emberek száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="towntotownPeopleWeek: ${towntotownPeopleWeek}">
+            <td th:text="${towntotownPeopleWeek.time}"></td>
+            <td th:text="${towntotownPeopleWeek.startingTown}"></td>
+            <td th:text="${towntotownPeopleWeek.landingTown}"></td>
+            <td th:text="${towntotownPeopleWeek.count}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <div>
+        <p>Vársoból városba menő emberek száma havi szinten</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Hónap</th>
+            <th>Kiindulási Város</th>
+            <th>Érkezési Város</th>
+            <th>Emberek száma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="towntotownPeopleMonth: ${towntotownPeopleMonth}">
+            <td th:text="${towntotownPeopleMonth.time}"></td>
+            <td th:text="${towntotownPeopleMonth.startingTown}"></td>
+            <td th:text="${towntotownPeopleMonth.landingTown}"></td>
+            <td th:text="${towntotownPeopleMonth.count}"></td>
         </tr>
         </tbody>
     </table>

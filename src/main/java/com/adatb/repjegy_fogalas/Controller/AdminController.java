@@ -57,6 +57,9 @@ public class AdminController {
         model.addAttribute("szolgaltatostat", flightDAO.getSzolgaltatoStat());
 
         model.addAttribute("towntotownWeek", flightDAO.getFlightDataTownToTownWeek());
+        model.addAttribute("towntotownMonth", flightDAO.getFlightDataTownToTownMonth());
+        model.addAttribute("towntotownPeopleWeek", flightDAO.getFlightDataTownToTownPeoplesWeek());
+        model.addAttribute("towntotownPeopleMonth", flightDAO.getFlightDataTownToTownPeoplesMonth());
         return "admin";
     }
 
