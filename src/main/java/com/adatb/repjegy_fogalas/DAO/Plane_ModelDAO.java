@@ -32,7 +32,7 @@ public class Plane_ModelDAO {
                 "LEFT JOIN repulogep r ON j.repulo_id = r.id\n" +
                 "LEFT JOIN modell m ON r.modell = m.modell\n" +
                 "GROUP BY m.nev\n" +
-                "ORDER BY atlag_ar DESC", new Plane_ModelDAO.Plane_ModelRowMapper());
+                "ORDER BY atlag_ar DESC", new Plane_ModelDAO.Stats_RowMapper());
         return result.isEmpty()? null : result;
     }
 
@@ -57,6 +57,16 @@ public class Plane_ModelDAO {
                     .model(rs.getString("MODELL"))
                     .name(rs.getString("NEV"))
                     .seatsNumber(rs.getInt("ULOHELYEK_SZAMA"))
+                    .build();
+        }
+    }
+
+    public  static  class  Stats_RowMapper implements RowMapper<Plane_Model>{
+        @Override
+        public Plane_Model mapRow(ResultSet rs, int norNum) throws  SQLException {
+            return  Plane_Model.builder()
+                    .model(rs.getString("MODELL_NEV"))
+                    .seatsNumber(rs.getInt("ATLAG_AR"))
                     .build();
         }
     }

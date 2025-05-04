@@ -392,5 +392,91 @@
         </tbody>
     </table>
 </div>
+
+<div>
+    <div>
+        <p>Átlag jegy ár</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Modell</th>
+            <th>Jegyár</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="avgprice : ${statistic}">
+            <td th:text="${avgprice.getModel()}"></td>
+            <td th:text="${avgprice.getSeatsNumber()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <div>
+        <p>Járatok bevételi statisztikája</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Indulási város</th>
+            <th>Célváros</th>
+            <th>Kiindulási időpont</th>
+            <th>Szolgáltató</th>
+            <th>Eladott jegyek</th>
+            <th>Alapár</th>
+            <th>Biztosítási bevétel</th>
+            <th>Jegy bevétel</th>
+            <th>Teljes bevétel</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="incomestats : ${incomestat}">
+            <td th:text="${incomestats.getId()}"></td>
+            <td th:text="${incomestats.getIndulasi_varos()}"></td>
+            <td th:text="${incomestats.getErkezesi_varos()}"></td>
+            <td th:text="${incomestats.getIndulasi_idopont()}"></td>
+            <td th:text="${incomestats.getSzolgaltato()}"></td>
+            <td th:text="${incomestats.getEladott_jegyek()}"></td>
+            <td th:text="${incomestats.getAlapar()}"></td>
+            <td th:text="${incomestats.getBiztositasi_bevetel()}"></td>
+            <td th:text="${incomestats.getJegy_bevetel()}"></td>
+            <td th:text="${incomestats.getTeljes_bevetel()}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <div>
+        <p>Utasok statisztikái</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Korcsoport</th>
+            <th>Utasok száma</th>
+            <th>Repülések száma</th>
+            <th>Átlagos jegyár</th>
+            <th>Átlagos biztosítási ár</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="passengerstats : ${passengerdemog}">
+            <td th:text="${passengerstats.getKorcsoport()}"></td>
+            <td th:text="${passengerstats.getUtasok_szama()}"></td>
+            <td th:text="${passengerstats.getRepulesek_szama()}"></td>
+            <td th:text="${passengerstats.getAtlagos_jegyar()}"></td>
+            <td th:text="${passengerstats.getAtlagos_biztositas_ara()}"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

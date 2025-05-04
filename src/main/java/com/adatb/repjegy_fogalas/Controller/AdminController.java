@@ -51,6 +51,9 @@ public class AdminController {
         model.addAttribute("ticket", ticketDAO.readAllTicket());
         model.addAttribute("booking", bookingDAO.readAllBooking());
         model.addAttribute("userstat",ticketDAO.ticketNumberForUsers());
+        model.addAttribute("statistic", planeModelDAO.getAveragePriceByModell());
+        model.addAttribute("incomestat", ticketDAO.getIncomeStats());
+        model.addAttribute("passengerdemog",userDAO.getPassengerDemog());
 
         model.addAttribute("towntotownWeek", flightDAO.getFlightDataTownToTownWeek());
         return "admin";
@@ -350,7 +353,12 @@ public class AdminController {
                     String userMessage = message.split("ORA-20001:")[1].split("ORA-")[0].trim();
                     redirectAttributes.addFlashAttribute("error", userMessage);
                     return "redirect:/admin/flight/update/" + flight_id;
+                }else if (message != null && message.contains("ORA-20107")){
+                    String userMessage = message.split("ORA-20107:")[1].split("ORA-")[0].trim();
+                    redirectAttributes.addFlashAttribute("error", userMessage);
+                    return "redirect:/admin/flight/update/" + flight_id;
                 }
+
             }
             redirectAttributes.addFlashAttribute("error", "Ismeretlen adatbázis hiba történt a járatmódosításkor.");
             return "redirect:/admin/flight/update/" + flight_id;
@@ -389,6 +397,10 @@ public class AdminController {
                 if (message != null && message.contains("ORA-20001")) {
                     // Trigger által küldött konkrét hibaüzenet kiírása
                     redirectAttributes.addFlashAttribute("error", "Az ár túl magas!");
+                    return "redirect:/admin/flight/createflight";
+                }else if (message != null && message.contains("ORA-20107")) {
+                    // A múltbeli időpont ellenőrző trigger hibájának kezelése
+                    redirectAttributes.addFlashAttribute("error", "A járat indulási időpontja nem lehet múltbeli időpont!");
                     return "redirect:/admin/flight/createflight";
                 }
             }
@@ -492,13 +504,5 @@ public class AdminController {
         bookingDAO.createBooking(flight_id, ticket_category_id, seat);
         return "redirect:/admin";
     }
-    @GetMapping("/admin/statistics")
-    public String showModelStatistics(Model model) {
-        List<Plane_Model> stats = planeModelDAO.getAveragePriceByModell();
-        model.addAttribute("modelStats", stats);
-        return "admin/statistics"; // ez a view fájlod neve
-    }
-
-
 
 }

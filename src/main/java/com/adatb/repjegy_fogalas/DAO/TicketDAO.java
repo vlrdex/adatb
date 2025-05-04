@@ -1,8 +1,5 @@
 package com.adatb.repjegy_fogalas.DAO;
-import com.adatb.repjegy_fogalas.Model.Booking;
-import com.adatb.repjegy_fogalas.Model.FavoriteLocatons;
-import com.adatb.repjegy_fogalas.Model.Ticket;
-import com.adatb.repjegy_fogalas.Model.User_stat;
+import com.adatb.repjegy_fogalas.Model.*;
 import jakarta.annotation.PostConstruct;
 import org.apache.catalina.User;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -73,6 +70,10 @@ public class TicketDAO {
         List<Ticket> result = jdbcTemplate.query("SELECT * FROM FOGLALAS WHERE email = ?",new TicketDAO.TicketRowMapper(), email);
         return result;
     }
+    public List<IncomeStats> getIncomeStats(){
+        List<IncomeStats> result = jdbcTemplate.query("SELECT      j.id AS jarat_id,     v1.nev AS indulasi_varos,     v2.nev AS celvaros,     j.kiindulasi_idopont,     r.szolgaltato,     COUNT(DISTINCT jegy.ulohely) AS eladott_jegyek,     j.ar AS alapar,     SUM(NVL(b.ar, 0)) AS biztositas_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) AS jegy_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) + SUM(NVL(b.ar, 0)) AS teljes_bevetel FROM      JARATOK j JOIN      VAROS v1 ON j.kiindulasi_hely = v1.id JOIN      VAROS v2 ON j.erkezesi_hely = v2.id JOIN      REPULOGEP r ON j.repulo_id = r.id LEFT JOIN      JEGYEK jegy ON j.id = jegy.jarat_id LEFT JOIN      FOGLALAS f ON j.id = f.jarat_id AND jegy.ulohely = f.ulohely LEFT JOIN      JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id LEFT JOIN      BIZTOSITASOK b ON jegy.biztositas_id = b.id GROUP BY      j.id, v1.nev, v2.nev, j.kiindulasi_idopont, r.szolgaltato, j.ar ORDER BY      teljes_bevetel DESC", new TicketDAO.IncomeRowMapper());
+        return result.isEmpty()? null : result;
+    }
 
     public List<User_stat> ticketNumberForUsers(){
         return (List<User_stat>) jdbcCall.execute().get("p_cursor");
@@ -116,6 +117,24 @@ public class TicketDAO {
                     .ki(rs.getString("KI"))
                     .be(rs.getString("BE"))
                     .emberek(rs.getInt("EMBEREK"))
+                    .build();
+        }
+    }
+    private static class IncomeRowMapper implements RowMapper<IncomeStats>{
+
+        @Override
+        public IncomeStats mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return IncomeStats.builder()
+                    .id(rs.getInt("JARAT_ID"))
+                    .indulasi_varos(rs.getString("INDULASI_VAROS"))
+                    .erkezesi_varos(rs.getString("CELVAROS"))
+                    .indulasi_idopont(rs.getString("KIINDULASI_IDOPONT"))
+                    .szolgaltato(rs.getString("SZOLGALTATO"))
+                    .eladott_jegyek(rs.getInt("ELADOTT_JEGYEK"))
+                    .alapar(rs.getInt("ALAPAR"))
+                    .biztositasi_bevetel(rs.getInt("BIZTOSITAS_BEVETEL"))
+                    .jegy_bevetel(rs.getInt("JEGY_BEVETEL"))
+                    .teljes_bevetel(rs.getInt("TELJES_BEVETEL"))
                     .build();
         }
     }

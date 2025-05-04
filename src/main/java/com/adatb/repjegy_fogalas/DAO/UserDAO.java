@@ -1,6 +1,8 @@
 package com.adatb.repjegy_fogalas.DAO;
 
 import com.adatb.repjegy_fogalas.Model.Custom_User;
+import com.adatb.repjegy_fogalas.Model.IncomeStats;
+import com.adatb.repjegy_fogalas.Model.PassengerDemog;
 import com.adatb.repjegy_fogalas.Model.Ticket;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,6 +51,39 @@ public class UserDAO {
         logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
     }
 
+    public List<PassengerDemog> getPassengerDemog(){
+        List<PassengerDemog> result = jdbcTemplate.query("SELECT \n" +
+                "    CASE \n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) < 18 THEN 'Kiskorú'\n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) BETWEEN 18 AND 30 THEN 'Fiatal felnőtt'\n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) BETWEEN 31 AND 50 THEN 'Középkorú'\n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) BETWEEN 51 AND 65 THEN 'Idősebb felnőtt'\n" +
+                "        ELSE 'Idős'\n" +
+                "    END AS korcsoport,\n" +
+                "    COUNT(DISTINCT f.email) AS utasok_szama,\n" +
+                "    COUNT(DISTINCT j.jarat_id) AS repulesek_szama,\n" +
+                "    ROUND(AVG(jar.ar), 2) AS atlagos_jegyar,\n" +
+                "    ROUND(AVG(COALESCE(b.ar, 0)), 2) AS atlagos_biztositas_ar\n" +
+                "FROM \n" +
+                "    FELHASZNALOK f\n" +
+                "LEFT JOIN \n" +
+                "    JEGYEK j ON f.email = j.email\n" +
+                "LEFT JOIN \n" +
+                "    JARATOK jar ON j.jarat_id = jar.id\n" +
+                "LEFT JOIN \n" +
+                "    BIZTOSITASOK b ON j.biztositas_id = b.id\n" +
+                "GROUP BY \n" +
+                "    CASE \n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) < 18 THEN 'Kiskorú'\n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) BETWEEN 18 AND 30 THEN 'Fiatal felnőtt'\n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) BETWEEN 31 AND 50 THEN 'Középkorú'\n" +
+                "        WHEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM f.szuletesi_datum) BETWEEN 51 AND 65 THEN 'Idősebb felnőtt'\n" +
+                "        ELSE 'Idős'\n" +
+                "    END\n" +
+                "ORDER BY \n" +
+                "    utasok_szama DESC",new UserDAO.PassengerRowMapper());
+        return result.isEmpty()? null : result;
+    }
 
     public static class UserRowMapper implements RowMapper<Custom_User>{
 
@@ -60,6 +95,19 @@ public class UserDAO {
                     .name(rs.getString("NEV"))
                     .birthDate(rs.getString("SZULETESI_DATUM"))
                     .admin(rs.getInt("ADMIN")==1)
+                    .build();
+        }
+    }
+    public static class PassengerRowMapper implements RowMapper<PassengerDemog>{
+
+        @Override
+        public PassengerDemog mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return PassengerDemog.builder()
+                    .korcsoport(rs.getString("KORCSOPORT"))
+                    .utasok_szama(rs.getInt("UTASOK_SZAMA"))
+                    .repulesek_szama(rs.getInt("REPULESEK_SZAMA"))
+                    .atlagos_jegyar(rs.getInt("ATLAGOS_JEGYAR"))
+                    .atlagos_biztositas_ara(rs.getInt("ATLAGOS_BIZTOSITAS_AR"))
                     .build();
         }
     }
