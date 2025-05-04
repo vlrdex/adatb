@@ -754,6 +754,7 @@ BEGIN
     END if;
         
 END;
+/
 
 CREATE OR REPLACE PROCEDURE foglalas_statisztika (
     p_cursor OUT SYS_REFCURSOR
@@ -764,5 +765,6 @@ BEGIN
         FROM JEGYEK J
         GROUP BY J.email;
 END;
+/
 
 
