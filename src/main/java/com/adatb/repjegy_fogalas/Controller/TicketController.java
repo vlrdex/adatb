@@ -5,6 +5,7 @@ import com.adatb.repjegy_fogalas.Model.Flight;
 import com.adatb.repjegy_fogalas.Model.Hotel;
 import com.adatb.repjegy_fogalas.Model.Plane_Model;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -80,14 +82,27 @@ public class TicketController {
                                @RequestParam("seat") int seat,
                                @RequestParam("insuranceId") int insuranceId,
                                @RequestParam("name") String name,
-                               @RequestParam(value = "hotelId", required = false) Integer hotelId) { // ÚJ SOR
+                               @RequestParam(value = "hotelId", required = false) Integer hotelId,
+                               RedirectAttributes redirectAttributes) { // ÚJ SOR
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         Flight flight = flightDAO.getFlightById(flight_id);
-        // TODO: ülőhely ellenörzése
 
         ticketDAO.createTicket(flight_id, seat, insuranceId, name, email);
-        bookingDAO.createBooking(flight_id, ticketCategoryId, seat);
+        try{
+            bookingDAO.createBooking(flight_id, ticketCategoryId, seat);
+        }catch (DataAccessException ex){
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null && message.contains("ORA-20005")) {
+                    // Az ORA-20001 hibát (trigger dobta) elkapjuk
+                    String error = "Az ülöhely már foglalt!";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/ticket/create/"+flight_id;
+            }
+        }
+        }
 
         // Ha szállodát is választott:
         if (hotelId != null) {
@@ -97,5 +112,6 @@ public class TicketController {
 
         return "redirect:/ticket";
     }
+
 
 }

@@ -767,4 +767,21 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER foglalt_ulohely
+BEFORE INSERT
+ON FOGLALAS
+FOR EACH ROW
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count
+    FROM FOGLALAS F
+    WHERE JARAT_ID = :NEW.JARAT_ID
+    AND F.ULOHELY = :NEW.ULOHELY;
+    IF v_count > 0 THEN
+            RAISE_APPLICATION_ERROR(-20005, 'Ez az ülőhely már foglalt erre a járatra!');
+        END IF;
+END;
+/
+
 

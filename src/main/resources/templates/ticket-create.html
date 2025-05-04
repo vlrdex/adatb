@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
+<div th:if="${error!=null}">
+    <p th:text="${error}"></p>
+</div>
 <form th:action="@{/admin/ticket/createticket}" method="post">
 
     <label for="flightId">Járat:</label>
