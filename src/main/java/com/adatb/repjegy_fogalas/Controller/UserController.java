@@ -8,6 +8,7 @@ import com.adatb.repjegy_fogalas.Service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,10 +88,22 @@ public class UserController {
         if(errors.isEmpty()){
             pasword=passwordEncoder.encode(pasword);
             Custom_User user=new Custom_User(email,pasword,name,birthDate,false);
-            userDAO.creatUser(user);
-            return "login";
+            try {
+                userDAO.creatUser(user);
+            } catch (DataAccessException ex) {
+                Throwable rootCause = ex.getCause();
+                if (rootCause instanceof SQLException) {
+                    String message = rootCause.getMessage();
+                    if (message != null && message.contains("ORA-20010")) {
+                        errors.add("Nem lehet a születésnap a jövöben");
+                    }
+                }
+            }
         }
 
+        if(errors.isEmpty()){
+            return "login";
+        }
         model.addAttribute("errors",errors);
         return "regist";
     }
@@ -158,13 +172,26 @@ public class UserController {
         if (errors.isEmpty()) {
             password = passwordEncoder.encode(password);
             Custom_User user = new Custom_User(email, password, name, birthDate, userDAO.findByEmail(old_email).isAdmin());
-            userDAO.updateUser(user, old_email);
-            Authentication authentication2 = SecurityContextHolder.getContext().getAuthentication();
-            UserDetails updatedUser = userDetailsService.loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken newAuth =
-                    new UsernamePasswordAuthenticationToken(updatedUser, authentication2.getCredentials(), updatedUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(newAuth);
+            try {
+                userDAO.updateUser(user,old_email);
+                Authentication authentication2 = SecurityContextHolder.getContext().getAuthentication();
+                UserDetails updatedUser = userDetailsService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken newAuth =
+                        new UsernamePasswordAuthenticationToken(updatedUser, authentication2.getCredentials(), updatedUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
+            } catch (DataAccessException ex) {
+                Throwable rootCause = ex.getCause();
+                if (rootCause instanceof SQLException) {
+                    String message = rootCause.getMessage();
+                    if (message != null && message.contains("ORA-20010")) {
+                        errors.add("Nem lehet a születésnap a jövöben");
+                    }
+                }
+            }
             model.addAttribute("user",user);
+        }
+
+        if (errors.isEmpty()){
             return "profil";
         }
         model.addAttribute("errors", errors);

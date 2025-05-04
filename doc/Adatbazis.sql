@@ -810,5 +810,14 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER ellenoriz_szuletesi_datum
+BEFORE INSERT OR UPDATE ON FELHASZNALOK
+FOR EACH ROW
+BEGIN
+   IF :NEW.szuletesi_datum > TRUNC(SYSDATE) THEN
+      RAISE_APPLICATION_ERROR(-20010, 'A születési dátum nem lehet jövőbeli!');
+   END IF;
+END;
+
 
 
