@@ -167,6 +167,37 @@ INSERT INTO VAROS (id, nev) VALUES (2, 'Berlin');
 INSERT INTO VAROS (id, nev) VALUES (3, 'Paris');
 INSERT INTO VAROS (id, nev) VALUES (4, 'London');
 INSERT INTO VAROS (id, nev) VALUES (5, 'New York');
+INSERT INTO VAROS (id, nev) VALUES (6, 'Tokyo');
+INSERT INTO VAROS (id, nev) VALUES (7, 'Moscow');
+INSERT INTO VAROS (id, nev) VALUES (8, 'Rome');
+INSERT INTO VAROS (id, nev) VALUES (9, 'Madrid');
+INSERT INTO VAROS (id, nev) VALUES (10, 'Vienna');
+INSERT INTO VAROS (id, nev) VALUES (11, 'Amsterdam');
+INSERT INTO VAROS (id, nev) VALUES (12, 'Prague');
+INSERT INTO VAROS (id, nev) VALUES (13, 'Warsaw');
+INSERT INTO VAROS (id, nev) VALUES (14, 'Copenhagen');
+INSERT INTO VAROS (id, nev) VALUES (15, 'Brussels');
+INSERT INTO VAROS (id, nev) VALUES (16, 'Stockholm');
+INSERT INTO VAROS (id, nev) VALUES (17, 'Oslo');
+INSERT INTO VAROS (id, nev) VALUES (18, 'Helsinki');
+INSERT INTO VAROS (id, nev) VALUES (19, 'Lisbon');
+INSERT INTO VAROS (id, nev) VALUES (20, 'Athens');
+INSERT INTO VAROS (id, nev) VALUES (21, 'Istanbul');
+INSERT INTO VAROS (id, nev) VALUES (22, 'Zurich');
+INSERT INTO VAROS (id, nev) VALUES (23, 'Munich');
+INSERT INTO VAROS (id, nev) VALUES (24, 'Frankfurt');
+INSERT INTO VAROS (id, nev) VALUES (25, 'Barcelona');
+INSERT INTO VAROS (id, nev) VALUES (26, 'Chicago');
+INSERT INTO VAROS (id, nev) VALUES (27, 'Los Angeles');
+INSERT INTO VAROS (id, nev) VALUES (28, 'Toronto');
+INSERT INTO VAROS (id, nev) VALUES (29, 'Mexico City');
+INSERT INTO VAROS (id, nev) VALUES (30, 'Buenos Aires');
+INSERT INTO VAROS (id, nev) VALUES (31, 'São Paulo');
+INSERT INTO VAROS (id, nev) VALUES (32, 'Shanghai');
+INSERT INTO VAROS (id, nev) VALUES (33, 'Seoul');
+INSERT INTO VAROS (id, nev) VALUES (34, 'Bangkok');
+INSERT INTO VAROS (id, nev) VALUES (35, 'Sydney');
+
 
 INSERT INTO BIZTOSITASOK (id, nev, ar, leiras) VALUES (1, 'Alapbiztosítás', 5000, 'Alap szintű utazási biztosítás');
 INSERT INTO BIZTOSITASOK (id, nev, ar, leiras) VALUES (2, 'Teljeskörű biztosítás', 10000, 'Teljes körű utazási és egészségbiztosítás');
@@ -192,15 +223,27 @@ INSERT INTO FELHASZNALOK (email, nev, jelszo, szuletesi_datum, admin) VALUES
 ('user5@example.com', 'Mária Nagy', '$2a$10$G8Pvwr5C5rnNjDgX7Qu4e.r4l0WAUqlxgCv04c3loyA3TvrObo6Ga', TO_DATE('1988-02-18', 'YYYY-MM-DD'), 1);
 
 INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
-(1, 'Lufthansa', 'Boeing_737');
+    (1, 'Lufthansa', 'Boeing_737');
 INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
-(2, 'Ryanair', 'Airbus_A320');
+    (2, 'Ryanair', 'Airbus_A320');
 INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
-(3, 'Wizz Air', 'Embraer_E190');
+    (3, 'Wizz Air', 'Embraer_E190');
 INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
-(4, 'Emirates', 'Boeing_787');
+    (4, 'Emirates', 'Boeing_787');
 INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
-(5, 'Qatar Airways', 'Airbus_A380');
+    (5, 'Qatar Airways', 'Airbus_A380');
+INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
+    (6, 'Lufthansa', 'Boeing_737');
+INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
+    (7, 'Ryanair', 'Airbus_A320');
+INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
+    (8, 'Wizz Air', 'Embraer_E190');
+INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
+    (9, 'Emirates', 'Boeing_787');
+INSERT INTO REPULOGEP (id, szolgaltato, modell) VALUES
+    (10, 'Qatar Airways', 'Airbus_A380');
+
+
 
 INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
 (1, 1, TO_DATE('2025-05-01 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-01 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5000);
@@ -212,6 +255,78 @@ INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erk
 (4, 2, TO_DATE('2025-05-04 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-05-04 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10000);
 INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
 (5, 5, TO_DATE('2025-05-05 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-05-05 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 12000);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (6, 1, TO_DATE('2025-05-06 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-06 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5500);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (7, 3, TO_DATE('2025-05-07 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-05-07 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 8500);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (8, 4, TO_DATE('2025-05-08 10:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, TO_DATE('2025-05-08 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 6500);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (9, 2, TO_DATE('2025-05-09 14:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-05-09 16:30:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10500);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (10, 5, TO_DATE('2025-05-10 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-05-10 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 12500);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (11, 1, TO_DATE('2025-05-11 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-05-11 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5700);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (12, 4, TO_DATE('2025-05-12 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-12 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 8000);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (13, 3, TO_DATE('2025-05-13 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, TO_DATE('2025-05-13 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 6200);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (14, 1, TO_DATE('2025-05-14 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-14 19:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10200);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (15, 2, TO_DATE('2025-05-15 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-05-15 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 11000);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (16, 5, TO_DATE('2025-05-16 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-05-16 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 9800);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (17, 4, TO_DATE('2025-05-17 13:30:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-17 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5400);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (18, 1, TO_DATE('2025-05-18 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-05-18 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 6400);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (19, 2, TO_DATE('2025-05-19 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-05-19 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10000);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (20, 3, TO_DATE('2025-05-20 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-20 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 7500);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (21, 4, TO_DATE('2025-05-21 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-05-21 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 6700);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (22, 5, TO_DATE('2025-05-22 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-22 20:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10900);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (23, 3, TO_DATE('2025-05-23 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, TO_DATE('2025-05-23 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 12700);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (24, 2, TO_DATE('2025-05-24 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-05-24 14:30:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 8300);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (25, 1, TO_DATE('2025-05-25 08:30:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-05-25 10:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 6000);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (26, 5, TO_DATE('2025-05-26 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-05-26 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 9400);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (27, 4, TO_DATE('2025-05-27 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, TO_DATE('2025-05-27 13:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 11800);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (28, 3, TO_DATE('2025-05-28 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-05-28 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10300);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (29, 2, TO_DATE('2025-05-29 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-05-29 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5600);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (30, 5, TO_DATE('2025-05-30 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-05-30 19:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 9900);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (31, 1, TO_DATE('2025-06-01 10:30:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-06-01 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 7700);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (32, 3, TO_DATE('2025-06-02 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-06-02 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 8900);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (33, 4, TO_DATE('2025-06-03 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-06-03 20:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 9600);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (34, 5, TO_DATE('2025-06-04 07:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-06-04 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 10800);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (35, 2, TO_DATE('2025-06-05 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, TO_DATE('2025-06-05 13:30:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 8300);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (36, 1, TO_DATE('2025-06-06 12:30:00', 'YYYY-MM-DD HH24:MI:SS'), 4, TO_DATE('2025-06-06 14:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 8900);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (37, 3, TO_DATE('2025-06-07 13:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, TO_DATE('2025-06-07 15:00:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 7100);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (38, 4, TO_DATE('2025-06-08 14:30:00', 'YYYY-MM-DD HH24:MI:SS'), 5, TO_DATE('2025-06-08 16:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 8900);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (39, 5, TO_DATE('2025-06-09 15:30:00', 'YYYY-MM-DD HH24:MI:SS'), 2, TO_DATE('2025-06-09 17:30:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 10600);
+INSERT INTO JARATOK (id, kiindulasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar) VALUES
+    (40, 1, TO_DATE('2025-06-10 08:00:00', 'YYYY-MM-DD HH24:MI:SS'), 3, TO_DATE('2025-06-10 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 5, 9500);
+-- 20 more entries can be generated similarly...
+
 
 INSERT INTO JEGYEK (jarat_id, ulohely, biztositas_id, nev, email) VALUES
 (1, 1, 1, 'Péter Kovács', 'user1@example.com');
