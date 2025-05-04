@@ -357,6 +357,10 @@ public class AdminController {
                     String userMessage = message.split("ORA-20107:")[1].split("ORA-")[0].trim();
                     redirectAttributes.addFlashAttribute("error", userMessage);
                     return "redirect:/admin/flight/update/" + flight_id;
+                }else if (message != null && message.contains("ORA-20002")){
+                    String userMessage = message.split("ORA-20002:")[1].split("ORA-")[0].trim();
+                    redirectAttributes.addFlashAttribute("error", userMessage);
+                    return "redirect:/admin/flight/update/" + flight_id;
                 }
 
             }
@@ -401,6 +405,10 @@ public class AdminController {
                 }else if (message != null && message.contains("ORA-20107")) {
                     // A múltbeli időpont ellenőrző trigger hibájának kezelése
                     redirectAttributes.addFlashAttribute("error", "A járat indulási időpontja nem lehet múltbeli időpont!");
+                    return "redirect:/admin/flight/createflight";
+                }else if (message != null && message.contains("ORA-20002")) {
+                    // A múltbeli időpont ellenőrző trigger hibájának kezelése
+                    redirectAttributes.addFlashAttribute("error", "Nem lehet az indulási város a célváros!");
                     return "redirect:/admin/flight/createflight";
                 }
             }

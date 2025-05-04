@@ -853,18 +853,18 @@ END;
 
 CREATE OR REPLACE TRIGGER foglalt_ulohely
 BEFORE INSERT
-ON FOGLALAS
+ON JEGYEK
 FOR EACH ROW
 DECLARE
-    v_count NUMBER;
+v_count NUMBER;
 BEGIN
-    SELECT COUNT(*) INTO v_count
-    FROM FOGLALAS F
-    WHERE JARAT_ID = :NEW.JARAT_ID
-    AND F.ULOHELY = :NEW.ULOHELY;
-    IF v_count > 0 THEN
+SELECT COUNT(*) INTO v_count
+FROM JEGYEK J
+WHERE JARAT_ID = :NEW.JARAT_ID
+  AND J.ULOHELY = :NEW.ULOHELY;
+IF v_count > 0 THEN
             RAISE_APPLICATION_ERROR(-20005, 'Ez az ülőhely már foglalt erre a járatra!');
-        END IF;
+END IF;
 END;
 /
 
@@ -900,6 +900,15 @@ BEFORE INSERT OR UPDATE OF kiindulasi_idopont ON JARATOK
 BEGIN
     IF :NEW.kiindulasi_idopont < SYSDATE THEN
         RAISE_APPLICATION_ERROR(-20107, 'A járat indulási időpontja nem lehet múltbeli időpont!');
+END IF;
+END;
+/
+CREATE OR REPLACE TRIGGER tr_check_different_cities
+BEFORE INSERT OR UPDATE ON JARATOK
+                            FOR EACH ROW
+BEGIN
+    IF :NEW.kiindulasi_hely = :NEW.erkezesi_hely THEN
+        RAISE_APPLICATION_ERROR(-20002, 'A kiindulási hely és az érkezési hely nem lehet ugyanaz a város!');
 END IF;
 END;
 /

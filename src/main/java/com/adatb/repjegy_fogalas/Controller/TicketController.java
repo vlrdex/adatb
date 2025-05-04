@@ -89,7 +89,7 @@ public class TicketController {
         Flight flight = flightDAO.getFlightById(flight_id);
 
         try{
-            bookingDAO.createBooking(flight_id, ticketCategoryId, seat);
+            ticketDAO.createTicket(flight_id, seat, insuranceId, name, email);
         }catch (DataAccessException ex){
             Throwable rootCause = ex.getCause();
             if (rootCause instanceof SQLException) {
@@ -102,7 +102,9 @@ public class TicketController {
             }
         }
         }
-        ticketDAO.createTicket(flight_id, seat, insuranceId, name, email);
+        bookingDAO.createBooking(flight_id, ticketCategoryId, seat);
+
+
 
         // Ha szállodát is választott:
         if (hotelId != null) {
