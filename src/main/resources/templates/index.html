@@ -38,6 +38,33 @@
 </header>
 
 <body>
-<p>Index</p>
+<p>Legnépszerübb járatok:</p>
+<form th:action="${'/index'}" method="post">
+    <label for="hany">Hányat?</label>
+    <input type="number" name="hany" id="hany">
+    <button>Lekérdez!</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Kindulási város:
+            </th>
+            <th>
+                Érkezési város:
+            </th>
+            <th>
+                Emberek száma:
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="fav : ${fav}">
+            <td th:text="${fav.getKi()}"></td>
+            <td th:text="${fav.getBe()}"></td>
+            <td th:text="${fav.getEmberek()}"></td>
+        </tr>
+    </tbody>
+</table>
 </body>
 </html>

@@ -34,6 +34,8 @@ public class UserController {
     private CustomUserDetailsService userDetailsService;
     @Autowired
     private Custom_TicketDAO customTicketDAO;
+    @Autowired
+    private TicketDAO ticketDAO;
 
     @Autowired
     UserController(UserDAO userDAO, PasswordEncoder passwordEncoder){
@@ -47,7 +49,14 @@ public class UserController {
     }
 
     @GetMapping("/index")
-    public String index(){
+    public String index(Model model){
+        model.addAttribute("fav",ticketDAO.favoriteLocatons(5));
+        return "index";
+    }
+
+    @PostMapping("/index")
+    public String index(Model model,@RequestParam("hany") int hany){
+        model.addAttribute("fav",ticketDAO.favoriteLocatons(hany));
         return "index";
     }
 
