@@ -478,5 +478,32 @@
     </table>
 </div>
 
+<div>
+    <div>
+        <p>Legsikeresebb szolgáltatók</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Szolgáltató</th>
+            <th>Eladott jegyek</th>
+            <th>Jegyek bevétele</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="szolgaltatostats : ${szolgaltatostat}">
+            <td th:text="${szolgaltatostats.getSzolgaltato()}"></td>
+            <td th:text="${szolgaltatostats.getOssz_eladott_jegy()}"></td>
+            <td th:text="${szolgaltatostats.getOssz_bevetel()}"></td>
+
+
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

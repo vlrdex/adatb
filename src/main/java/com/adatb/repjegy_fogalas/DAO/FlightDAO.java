@@ -1,8 +1,5 @@
 package com.adatb.repjegy_fogalas.DAO;
-import com.adatb.repjegy_fogalas.Model.Flight;
-import com.adatb.repjegy_fogalas.Model.FlightDataTownToTown;
-import com.adatb.repjegy_fogalas.Model.FlightNice;
-import com.adatb.repjegy_fogalas.Model.Serch_Result;
+import com.adatb.repjegy_fogalas.Model.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -110,6 +107,28 @@ public class FlightDAO {
                 kiinduasi_hely, kiindulasi_idopont, erkezesi_hely, erkezesi_idopont, repulo_id, ar, id);
     }
 
+    public List<SzolgaltatoKimutatas> getSzolgaltatoStat(){
+        List<SzolgaltatoKimutatas> result = jdbcTemplate.query("SELECT\n" +
+                "    r.szolgaltato,\n" +
+                "    COUNT(DISTINCT jegy.ulohely || '-' || jegy.jarat_id) AS osszes_eladott_jegy,\n" +
+                "    SUM(j.ar - (j.ar * NVL(jk.kedvezmeny, 0) / 100)) AS jegy_bevetel\n" +
+                "FROM\n" +
+                "    REPULOGEP r\n" +
+                "JOIN\n" +
+                "    JARATOK j ON r.id = j.repulo_id\n" +
+                "LEFT JOIN\n" +
+                "    JEGYEK jegy ON j.id = jegy.jarat_id\n" +
+                "LEFT JOIN\n" +
+                "    FOGLALAS f ON jegy.ulohely = f.ulohely AND jegy.jarat_id = f.jarat_id\n" +
+                "LEFT JOIN\n" +
+                "    JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id\n" +
+                "GROUP BY\n" +
+                "    r.szolgaltato\n" +
+                "ORDER BY\n" +
+                "    jegy_bevetel DESC\n",new FlightDAO.SzolgaltatoRowMapper());
+        return result.isEmpty()? null : result;
+    }
+
     public List<Serch_Result> serch(int ki_hely,int be_hely,String date){
         MapSqlParameterSource inParams = new MapSqlParameterSource()
                 .addValue("nap", date)
@@ -186,6 +205,17 @@ public class FlightDAO {
             return Serch_Result.builder()
                     .first_id(rs.getInt("FIRST"))
                     .second_id(rs.getInt("SECOND"))
+                    .build();
+        }
+    }
+    public static class SzolgaltatoRowMapper implements RowMapper<SzolgaltatoKimutatas>{
+
+        @Override
+        public SzolgaltatoKimutatas mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return SzolgaltatoKimutatas.builder()
+                    .szolgaltato(rs.getString("SZOLGALTATO"))
+                    .ossz_eladott_jegy(rs.getInt("OSSZES_ELADOTT_JEGY"))
+                    .ossz_bevetel(rs.getInt("JEGY_BEVETEL"))
                     .build();
         }
     }

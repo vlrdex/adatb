@@ -54,6 +54,7 @@ public class AdminController {
         model.addAttribute("statistic", planeModelDAO.getAveragePriceByModell());
         model.addAttribute("incomestat", ticketDAO.getIncomeStats());
         model.addAttribute("passengerdemog",userDAO.getPassengerDemog());
+        model.addAttribute("szolgaltatostat", flightDAO.getSzolgaltatoStat());
 
         model.addAttribute("towntotownWeek", flightDAO.getFlightDataTownToTownWeek());
         return "admin";
