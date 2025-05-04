@@ -88,7 +88,6 @@ public class TicketController {
         String email = authentication.getName();
         Flight flight = flightDAO.getFlightById(flight_id);
 
-        ticketDAO.createTicket(flight_id, seat, insuranceId, name, email);
         try{
             bookingDAO.createBooking(flight_id, ticketCategoryId, seat);
         }catch (DataAccessException ex){
@@ -103,6 +102,7 @@ public class TicketController {
             }
         }
         }
+        ticketDAO.createTicket(flight_id, seat, insuranceId, name, email);
 
         // Ha szállodát is választott:
         if (hotelId != null) {

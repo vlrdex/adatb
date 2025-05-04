@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/ticket'">Vissza</button>
 </div>
+<div th:if="${error!=null}">
+    <p th:text="${error}"></p>
+</div>
 <div>
     <table>
         <thead>
