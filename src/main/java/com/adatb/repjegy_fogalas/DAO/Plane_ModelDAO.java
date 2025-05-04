@@ -26,6 +26,15 @@ public class Plane_ModelDAO {
         List<Plane_Model> result = jdbcTemplate.query("SELECT * FROM MODELL",new Plane_ModelDAO.Plane_ModelRowMapper());
         return result.isEmpty()? null : result;
     }
+    public List<Plane_Model> getAveragePriceByModell(){
+        List<Plane_Model> result = jdbcTemplate.query("SELECT m.nev AS modell_nev, AVG(j.ar) AS atlag_ar\n" +
+                "FROM jaratok j\n" +
+                "LEFT JOIN repulogep r ON j.repulo_id = r.id\n" +
+                "LEFT JOIN modell m ON r.modell = m.modell\n" +
+                "GROUP BY m.nev\n" +
+                "ORDER BY atlag_ar DESC", new Plane_ModelDAO.Plane_ModelRowMapper());
+        return result.isEmpty()? null : result;
+    }
 
     public Plane_Model getPlaneModelById(String id){
         List<Plane_Model> result = jdbcTemplate.query("SELECT * FROM MODELL WHERE modell = ?",new Plane_ModelDAO.Plane_ModelRowMapper(), id);

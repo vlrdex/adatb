@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -491,5 +492,13 @@ public class AdminController {
         bookingDAO.createBooking(flight_id, ticket_category_id, seat);
         return "redirect:/admin";
     }
+    @GetMapping("/admin/statistics")
+    public String showModelStatistics(Model model) {
+        List<Plane_Model> stats = planeModelDAO.getAveragePriceByModell();
+        model.addAttribute("modelStats", stats);
+        return "admin/statistics"; // ez a view fájlod neve
+    }
+
+
 
 }
