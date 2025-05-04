@@ -330,38 +330,76 @@ public class AdminController {
 
     @PostMapping("admin/flight/update/{id}")
     public String updateFlight(@PathVariable("id") int flight_id,
-                              @RequestParam("startingTown") int startingTown,
-                              @RequestParam("startingTime") LocalDateTime startingTime,
-                              @RequestParam("landingTown") int landingTown,
-                              @RequestParam("landingTime") LocalDateTime landingTime,
-                              @RequestParam("planeId") int planeId,
-                              @RequestParam("price") int price){
-        flightDAO.updateFlight(flight_id, startingTown, startingTime, landingTown, landingTime, planeId, price);
+                               @RequestParam("startingTown") int startingTown,
+                               @RequestParam("startingTime") LocalDateTime startingTime,
+                               @RequestParam("landingTown") int landingTown,
+                               @RequestParam("landingTime") LocalDateTime landingTime,
+                               @RequestParam("planeId") int planeId,
+                               @RequestParam("price") int price,
+                               RedirectAttributes redirectAttributes) {
+
+        try {
+            flightDAO.updateFlight(flight_id, startingTown, startingTime, landingTown, landingTime, planeId, price);
+        } catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null && message.contains("ORA-20001")) {
+                    // Ha szeretnéd pontosan az üzenetet visszaadni:
+                    String userMessage = message.split("ORA-20001:")[1].split("ORA-")[0].trim();
+                    redirectAttributes.addFlashAttribute("error", userMessage);
+                    return "redirect:/admin/flight/update/" + flight_id;
+                }
+            }
+            redirectAttributes.addFlashAttribute("error", "Ismeretlen adatbázis hiba történt a járatmódosításkor.");
+            return "redirect:/admin/flight/update/" + flight_id;
+        }
+
         return "redirect:/admin";
     }
+
     @GetMapping("admin/flight/createflight")
     public String createFlightView(Model model) {
         model.addAttribute("town", townDAO.readAllTown());
         model.addAttribute("plane", planeDAO.readAllPlane());
         return "flight-create";
     }
+
     @PostMapping(value = "/admin/flight/createflight")
     public String createFlight(@RequestParam("startingTown") int startingTown,
-                              @RequestParam("startingTime") LocalDateTime startingTime,
-                              @RequestParam("landingTown") int landingTown,
-                              @RequestParam("landingTime") LocalDateTime landingTime,
-                              @RequestParam("planeId") int planeId,
-                              @RequestParam("price") int price,
+                               @RequestParam("startingTime") LocalDateTime startingTime,
+                               @RequestParam("landingTown") int landingTown,
+                               @RequestParam("landingTime") LocalDateTime landingTime,
+                               @RequestParam("planeId") int planeId,
+                               @RequestParam("price") int price,
                                RedirectAttributes redirectAttributes) {
 
-        if(landingTime.isBefore(startingTime)){
-            //felhasználo büntetése hogy fogyatékos volt irjaon be ujra mindent
-            redirectAttributes.addFlashAttribute("error","Hibás időpontok");
+        if (landingTime.isBefore(startingTime)) {
+            redirectAttributes.addFlashAttribute("error", "Hibás időpontok: az érkezés nem lehet korábban mint az indulás.");
             return "redirect:/admin/flight/createflight";
         }
-        flightDAO.createFlight(startingTown, startingTime, landingTown, landingTime, planeId, price);
+
+        try {
+            flightDAO.createFlight(startingTown, startingTime, landingTown, landingTime, planeId, price);
+        } catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null && message.contains("ORA-20001")) {
+                    // Trigger által küldött konkrét hibaüzenet kiírása
+                    redirectAttributes.addFlashAttribute("error", "Az ár túl magas!");
+                    return "redirect:/admin/flight/createflight";
+                }
+            }
+            // Egyéb hiba
+            redirectAttributes.addFlashAttribute("error", "Ismeretlen adatbázis hiba történt a járat létrehozásakor.");
+            return "redirect:/admin/flight/createflight";
+        }
+
         return "redirect:/admin";
     }
+
+
 
 
 
