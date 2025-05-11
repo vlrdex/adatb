@@ -571,5 +571,53 @@
     </table>
 </div>
 
+<div>
+    <div>
+        <p>Járatok ahol magasabb az ár mint az áttlag</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Ár:</th>
+            <th>Szollgáltato</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="szolgaltatostats : ${avg}">
+            <td th:text="${szolgaltatostats.getId()}"></td>
+            <td th:text="${szolgaltatostats.getModel()}"></td>
+            <td th:text="${szolgaltatostats.getServiceProvider()}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <div>
+        <p>Napi foglalás szám és bevétel</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Datum:</th>
+            <th>Foglalás szám:</th>
+            <th>Bevétel:</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="szolgaltatostats : ${daily}">
+            <td th:text="${szolgaltatostats.getSzolgaltato().split(' ')[0]}"></td>
+            <td th:text="${szolgaltatostats.getOssz_eladott_jegy()}"></td>
+            <td th:text="${szolgaltatostats.getOssz_bevetel()}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

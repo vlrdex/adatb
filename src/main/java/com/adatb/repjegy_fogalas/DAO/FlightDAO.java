@@ -148,6 +148,21 @@ public class FlightDAO {
 
         return result;
     }
+
+    public List<SzolgaltatoKimutatas> dalyIncome(){
+        return jdbcTemplate.query("SELECT " +
+                "    TRUNC(j.kiindulasi_idopont) AS SZOLGALTATO, " +
+                "    COUNT(f.id) AS OSSZES_ELADOTT_JEGY, " +
+                "    SUM(j.ar) AS JEGY_BEVETEL " +
+                "FROM " +
+                "    FOGLALaS f " +
+                "JOIN  " +
+                "    JARATOK j ON f.jarat_id = j.id " +
+                "GROUP BY " +
+                "    TRUNC(j.kiindulasi_idopont) " +
+                "ORDER BY " +
+                "    SZOLGALTATO",new SzolgaltatoRowMapper());
+    }
     public int deleteFlight(int id){
         return jdbcTemplate.update("DELETE FROM JARATOK WHERE id = ?", id);
     }

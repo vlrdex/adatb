@@ -60,6 +60,8 @@ public class AdminController {
         model.addAttribute("towntotownMonth", flightDAO.getFlightDataTownToTownMonth());
         model.addAttribute("towntotownPeopleWeek", flightDAO.getFlightDataTownToTownPeoplesWeek());
         model.addAttribute("towntotownPeopleMonth", flightDAO.getFlightDataTownToTownPeoplesMonth());
+        model.addAttribute("avg",planeDAO.biggerThenAVG());
+        model.addAttribute("daily",flightDAO.dalyIncome());
         return "admin";
     }
 

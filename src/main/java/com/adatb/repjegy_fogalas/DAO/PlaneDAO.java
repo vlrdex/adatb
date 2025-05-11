@@ -33,6 +33,25 @@ public class PlaneDAO {
         return result.get(0);
     }
 
+    public List<Plane> biggerThenAVG(){
+        return jdbcTemplate.query("SELECT" +
+                "    j.id, " +
+                "    j.ar as modell, " +
+                "    r.szolgaltato " +
+                "FROM " +
+                "    JARATOK j " +
+                "JOIN " +
+                "    REPULOGEP r ON j.repulo_id = r.id " +
+                "WHERE " +
+                "    j.ar > (" +
+                "        SELECT AVG(j2.ar)" +
+                "        FROM JARATOK j2" +
+                "        WHERE j2.repulo_id = j.repulo_id" +
+                "    )" +
+                "ORDER BY " +
+                "    j.ar DESC",new PlaneRowMapper());
+    }
+
     public int updatePlane(int id, String model, String szolgaltato) {
         return jdbcTemplate.update("UPDATE REPULOGEP SET modell = ?, szolgaltato = ? WHERE id = ?", model, szolgaltato, id);
     }
