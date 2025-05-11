@@ -69,39 +69,9 @@ public class TicketDAO {
         List<Ticket> result = jdbcTemplate.query("SELECT * FROM FOGLALAS WHERE email = ?",new TicketDAO.TicketRowMapper(), email);
         return result;
     }
+
     public List<IncomeStats> getIncomeStats(){
         List<IncomeStats> result = jdbcTemplate.query("SELECT      j.id AS jarat_id,     v1.nev AS indulasi_varos,     v2.nev AS celvaros,     j.kiindulasi_idopont,     r.szolgaltato,     COUNT(DISTINCT jegy.ulohely) AS eladott_jegyek,     j.ar AS alapar,     SUM(NVL(b.ar, 0)) AS biztositas_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) AS jegy_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) + SUM(NVL(b.ar, 0)) AS teljes_bevetel FROM      JARATOK j JOIN      VAROS v1 ON j.kiindulasi_hely = v1.id JOIN      VAROS v2 ON j.erkezesi_hely = v2.id JOIN      REPULOGEP r ON j.repulo_id = r.id LEFT JOIN      JEGYEK jegy ON j.id = jegy.jarat_id LEFT JOIN      FOGLALAS f ON j.id = f.jarat_id AND jegy.ulohely = f.ulohely LEFT JOIN      JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id LEFT JOIN      BIZTOSITASOK b ON jegy.biztositas_id = b.id GROUP BY      j.id, v1.nev, v2.nev, j.kiindulasi_idopont, r.szolgaltato, j.ar ORDER BY      teljes_bevetel DESC", new TicketDAO.IncomeRowMapper());
-        return result.isEmpty()? null : result;
-    }
-    public List<TicketList> getTicketStat(){
-        List<TicketList> result = jdbcTemplate.query("SELECT \n" +
-                "    jk.nev AS jegykategoria,\n" +
-                "    jk.kedvezmeny AS kedvezmeny_szazalek,\n" +
-                "    COUNT(f.id) AS foglalasok_szama,\n" +
-                "    ROUND(AVG(j.ar * (1 - jk.kedvezmeny/100)), 2) AS atlagos_fizetett_ar\n" +
-                "FROM FOGLALAS f\n" +
-                "JOIN JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id\n" +
-                "JOIN JARATOK j ON f.jarat_id = j.id\n" +
-                "GROUP BY jk.nev, jk.kedvezmeny\n" +
-                "ORDER BY foglalasok_szama DESC", new TicketDAO.FoglaltRowMapper());
-        return result.isEmpty()? null : result;
-    }
-    public List<FreeSeats> getFreeSeats(){
-        List<FreeSeats> result = jdbcTemplate.query("SELECT \n" +
-                "    j.id AS jarat_azonosito,\n" +
-                "    vki.nev || ' -> ' || ver.nev AS utvonal,\n" +
-                "    j.kiindulasi_idopont,\n" +
-                "    m.ulohelyek_szama AS osszes_hely,\n" +
-                "    COUNT(jegy.ulohely) AS foglalt_helyek,\n" +
-                "    m.ulohelyek_szama - COUNT(jegy.ulohely) AS szabad_helyek\n" +
-                "FROM JARATOK j\n" +
-                "JOIN VAROS vki ON j.kiindulasi_hely = vki.id\n" +
-                "JOIN VAROS ver ON j.erkezesi_hely = ver.id\n" +
-                "JOIN REPULOGEP r ON j.repulo_id = r.id\n" +
-                "JOIN MODELL m ON r.modell = m.modell\n" +
-                "LEFT JOIN JEGYEK jegy ON j.id = jegy.jarat_id\n" +
-                "GROUP BY j.id, vki.nev, ver.nev, j.kiindulasi_idopont, m.ulohelyek_szama\n" +
-                "ORDER BY j.kiindulasi_idopont", new TicketDAO.FreeSeatsRowMapper());
         return result.isEmpty()? null : result;
     }
 
@@ -194,5 +164,36 @@ public class TicketDAO {
                     .szabadhelyek(rs.getInt("SZABAD_HELYEK"))
                     .build();
         }
+    }
+    public List<TicketList> getTicketStat(){
+        List<TicketList> result = jdbcTemplate.query("SELECT \n" +
+                "    jk.nev AS jegykategoria,\n" +
+                "    jk.kedvezmeny AS kedvezmeny_szazalek,\n" +
+                "    COUNT(f.id) AS foglalasok_szama,\n" +
+                "    ROUND(AVG(j.ar * (1 - jk.kedvezmeny/100)), 2) AS atlagos_fizetett_ar\n" +
+                "FROM FOGLALAS f\n" +
+                "JOIN JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id\n" +
+                "JOIN JARATOK j ON f.jarat_id = j.id\n" +
+                "GROUP BY jk.nev, jk.kedvezmeny\n" +
+                "ORDER BY foglalasok_szama DESC", new TicketDAO.FoglaltRowMapper());
+        return result.isEmpty()? null : result;
+    }
+    public List<FreeSeats> getFreeSeats(){
+        List<FreeSeats> result = jdbcTemplate.query("SELECT \n" +
+                "    j.id AS jarat_azonosito,\n" +
+                "    vki.nev || ' -> ' || ver.nev AS utvonal,\n" +
+                "    j.kiindulasi_idopont,\n" +
+                "    m.ulohelyek_szama AS osszes_hely,\n" +
+                "    COUNT(jegy.ulohely) AS foglalt_helyek,\n" +
+                "    m.ulohelyek_szama - COUNT(jegy.ulohely) AS szabad_helyek\n" +
+                "FROM JARATOK j\n" +
+                "JOIN VAROS vki ON j.kiindulasi_hely = vki.id\n" +
+                "JOIN VAROS ver ON j.erkezesi_hely = ver.id\n" +
+                "JOIN REPULOGEP r ON j.repulo_id = r.id\n" +
+                "JOIN MODELL m ON r.modell = m.modell\n" +
+                "LEFT JOIN JEGYEK jegy ON j.id = jegy.jarat_id\n" +
+                "GROUP BY j.id, vki.nev, ver.nev, j.kiindulasi_idopont, m.ulohelyek_szama\n" +
+                "ORDER BY j.kiindulasi_idopont", new TicketDAO.FreeSeatsRowMapper());
+        return result.isEmpty()? null : result;
     }
 }
