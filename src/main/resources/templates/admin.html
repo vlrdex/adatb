@@ -619,5 +619,67 @@
     </table>
 </div>
 
+<div>
+    <div>
+        <p>Megjeleníti, hogy a foglalásokhoz milyen jegykategóriákat választottak</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Jegykategória</th>
+            <th>Kedvezményes százalék</th>
+            <th>Foglalások száma</th>
+            <th>Átlag fizetett ár</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticketstatCat : ${ticketstat}">
+            <td th:text="${ticketstatCat.getCategory()}"></td>
+            <td th:text="${ticketstatCat.getDiscount()}"></td>
+            <td th:text="${ticketstatCat.getFoglalasok_szama()}"></td>
+            <td th:text="${ticketstatCat.getAtlag_fizetett()}"></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <div>
+        <p>Kilistázza, hogy az egyes járatokon hány szabad hely van még</p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Járat azonosító</th>
+            <th>Utvonal</th>
+            <th>Indulás</th>
+            <th>Összes hely</th>
+            <th>Foglalt helyek</th>
+            <th>Szabad helyek</th>
+
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="szabadhelyek : ${freeseats}">
+            <td th:text="${szabadhelyek.getId()}"></td>
+            <td th:text="${szabadhelyek.getUtvonal()}"></td>
+            <td th:text="${szabadhelyek.getIdopont()}"></td>
+            <td th:text="${szabadhelyek.getUlohelyek()}"></td>
+            <td th:text="${szabadhelyek.getFoglalthely()}"></td>
+            <td th:text="${szabadhelyek.getSzabadhelyek()}"></td>
+
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

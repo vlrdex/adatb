@@ -1,7 +1,6 @@
 package com.adatb.repjegy_fogalas.DAO;
 import com.adatb.repjegy_fogalas.Model.*;
 import jakarta.annotation.PostConstruct;
-import org.apache.catalina.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -74,6 +73,37 @@ public class TicketDAO {
         List<IncomeStats> result = jdbcTemplate.query("SELECT      j.id AS jarat_id,     v1.nev AS indulasi_varos,     v2.nev AS celvaros,     j.kiindulasi_idopont,     r.szolgaltato,     COUNT(DISTINCT jegy.ulohely) AS eladott_jegyek,     j.ar AS alapar,     SUM(NVL(b.ar, 0)) AS biztositas_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) AS jegy_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) + SUM(NVL(b.ar, 0)) AS teljes_bevetel FROM      JARATOK j JOIN      VAROS v1 ON j.kiindulasi_hely = v1.id JOIN      VAROS v2 ON j.erkezesi_hely = v2.id JOIN      REPULOGEP r ON j.repulo_id = r.id LEFT JOIN      JEGYEK jegy ON j.id = jegy.jarat_id LEFT JOIN      FOGLALAS f ON j.id = f.jarat_id AND jegy.ulohely = f.ulohely LEFT JOIN      JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id LEFT JOIN      BIZTOSITASOK b ON jegy.biztositas_id = b.id GROUP BY      j.id, v1.nev, v2.nev, j.kiindulasi_idopont, r.szolgaltato, j.ar ORDER BY      teljes_bevetel DESC", new TicketDAO.IncomeRowMapper());
         return result.isEmpty()? null : result;
     }
+    public List<TicketList> getTicketStat(){
+        List<TicketList> result = jdbcTemplate.query("SELECT \n" +
+                "    jk.nev AS jegykategoria,\n" +
+                "    jk.kedvezmeny AS kedvezmeny_szazalek,\n" +
+                "    COUNT(f.id) AS foglalasok_szama,\n" +
+                "    ROUND(AVG(j.ar * (1 - jk.kedvezmeny/100)), 2) AS atlagos_fizetett_ar\n" +
+                "FROM FOGLALAS f\n" +
+                "JOIN JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id\n" +
+                "JOIN JARATOK j ON f.jarat_id = j.id\n" +
+                "GROUP BY jk.nev, jk.kedvezmeny\n" +
+                "ORDER BY foglalasok_szama DESC", new TicketDAO.FoglaltRowMapper());
+        return result.isEmpty()? null : result;
+    }
+    public List<FreeSeats> getFreeSeats(){
+        List<FreeSeats> result = jdbcTemplate.query("SELECT \n" +
+                "    j.id AS jarat_azonosito,\n" +
+                "    vki.nev || ' -> ' || ver.nev AS utvonal,\n" +
+                "    j.kiindulasi_idopont,\n" +
+                "    m.ulohelyek_szama AS osszes_hely,\n" +
+                "    COUNT(jegy.ulohely) AS foglalt_helyek,\n" +
+                "    m.ulohelyek_szama - COUNT(jegy.ulohely) AS szabad_helyek\n" +
+                "FROM JARATOK j\n" +
+                "JOIN VAROS vki ON j.kiindulasi_hely = vki.id\n" +
+                "JOIN VAROS ver ON j.erkezesi_hely = ver.id\n" +
+                "JOIN REPULOGEP r ON j.repulo_id = r.id\n" +
+                "JOIN MODELL m ON r.modell = m.modell\n" +
+                "LEFT JOIN JEGYEK jegy ON j.id = jegy.jarat_id\n" +
+                "GROUP BY j.id, vki.nev, ver.nev, j.kiindulasi_idopont, m.ulohelyek_szama\n" +
+                "ORDER BY j.kiindulasi_idopont", new TicketDAO.FreeSeatsRowMapper());
+        return result.isEmpty()? null : result;
+    }
 
     public List<User_stat> ticketNumberForUsers(){
         return (List<User_stat>) jdbcCall.execute().get("p_cursor");
@@ -135,6 +165,33 @@ public class TicketDAO {
                     .biztositasi_bevetel(rs.getInt("BIZTOSITAS_BEVETEL"))
                     .jegy_bevetel(rs.getInt("JEGY_BEVETEL"))
                     .teljes_bevetel(rs.getInt("TELJES_BEVETEL"))
+                    .build();
+        }
+    }
+    private static class FoglaltRowMapper implements RowMapper<TicketList>{
+
+        @Override
+        public TicketList mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+            return TicketList.builder()
+                    .category(rs.getString("JEGYKATEGORIA"))
+                    .discount(rs.getInt("KEDVEZMENY_SZAZALEK"))
+                    .foglalasok_szama(rs.getInt("FOGLALASOK_SZAMA"))
+                    .atlag_fizetett(rs.getInt("ATLAGOS_FIZETETT_AR"))
+                    .build();
+        }
+    }
+    private static class FreeSeatsRowMapper implements RowMapper<FreeSeats>{
+
+        @Override
+        public FreeSeats mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return FreeSeats.builder()
+                    .id(rs.getInt("JARAT_AZONOSITO"))
+                    .utvonal(rs.getString("UTVONAL"))
+                    .idopont(rs.getString("KIINDULASI_IDOPONT"))
+                    .ulohelyek(rs.getInt("OSSZES_HELY"))
+                    .foglalthely(rs.getInt("FOGLALT_HELYEK"))
+                    .szabadhelyek(rs.getInt("SZABAD_HELYEK"))
                     .build();
         }
     }

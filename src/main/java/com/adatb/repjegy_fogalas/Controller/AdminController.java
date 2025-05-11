@@ -55,6 +55,10 @@ public class AdminController {
         model.addAttribute("incomestat", ticketDAO.getIncomeStats());
         model.addAttribute("passengerdemog",userDAO.getPassengerDemog());
         model.addAttribute("szolgaltatostat", flightDAO.getSzolgaltatoStat());
+        model.addAttribute("ticketstat", ticketDAO.getTicketStat());
+        model.addAttribute("freeseats", ticketDAO.getFreeSeats());
+
+
 
         model.addAttribute("towntotownWeek", flightDAO.getFlightDataTownToTownWeek());
         model.addAttribute("towntotownMonth", flightDAO.getFlightDataTownToTownMonth());
