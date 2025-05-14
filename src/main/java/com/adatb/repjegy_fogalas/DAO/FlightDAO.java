@@ -78,11 +78,11 @@ public class FlightDAO {
 
     public List<FlightDataTownToTown> getFlightDataTownToTownPeoplesWeek(){
         List<FlightDataTownToTown> result = jdbcTemplate.query("SELECT TRUNC(JARATOK.KIINDULASI_IDOPONT, 'IW') AS TIME, BE.NEV AS STARTINGTOWN, " +
-                "KI.NEV AS LANDINGTOWN, COUNT(FOGLALAS.ID) AS COUNT " +
+                "KI.NEV AS LANDINGTOWN, COUNT(JEGYEK.nev) AS COUNT " +
                 "FROM JARATOK " +
                 "JOIN VAROS BE ON JARATOK.KIINDULASI_HELY = BE.ID " +
                 "JOIN VAROS KI ON JARATOK.ERKEZESI_HELY = KI.ID " +
-                "JOIN FOGLALAS ON JARATOK.ID = FOGLALAS.JARAT_ID " +
+                "JOIN JEGYEK ON JARATOK.ID = JEGYEK.JARAT_ID " +
                 "GROUP BY TRUNC(JARATOK.KIINDULASI_IDOPONT, 'IW'), BE.NEV, KI.NEV " +
                 "ORDER BY TIME, STARTINGTOWN, LANDINGTOWN",new FlightDAO.FlightDataTownToTownRowMapper());
         return result.isEmpty()? null : result;
@@ -90,11 +90,11 @@ public class FlightDAO {
 
     public List<FlightDataTownToTown> getFlightDataTownToTownPeoplesMonth(){
         List<FlightDataTownToTown> result = jdbcTemplate.query("SELECT TRUNC(JARATOK.KIINDULASI_IDOPONT, 'MM') AS TIME, BE.NEV AS STARTINGTOWN, " +
-                "KI.NEV AS LANDINGTOWN, COUNT(FOGLALAS.ID) AS COUNT " +
+                "KI.NEV AS LANDINGTOWN, COUNT(JEGYEK.nev) AS COUNT " +
                 "FROM JARATOK " +
                 "JOIN VAROS BE ON JARATOK.KIINDULASI_HELY = BE.ID " +
                 "JOIN VAROS KI ON JARATOK.ERKEZESI_HELY = KI.ID " +
-                "JOIN FOGLALAS ON JARATOK.ID = FOGLALAS.JARAT_ID " +
+                "JOIN JEGYEK ON JARATOK.ID = JEGYEK.JARAT_ID " +
                 "GROUP BY TRUNC(JARATOK.KIINDULASI_IDOPONT, 'MM'), BE.NEV, KI.NEV " +
                 "ORDER BY TIME, STARTINGTOWN, LANDINGTOWN",new FlightDAO.FlightDataTownToTownRowMapper());
         return result.isEmpty()? null : result;
@@ -119,9 +119,7 @@ public class FlightDAO {
                 "LEFT JOIN\n" +
                 "    JEGYEK jegy ON j.id = jegy.jarat_id\n" +
                 "LEFT JOIN\n" +
-                "    FOGLALAS f ON jegy.ulohely = f.ulohely AND jegy.jarat_id = f.jarat_id\n" +
-                "LEFT JOIN\n" +
-                "    JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id\n" +
+                "    JEGYKATEGORIA jk ON jegy.jegykategoria_id = jk.id\n" +
                 "GROUP BY\n" +
                 "    r.szolgaltato\n" +
                 "ORDER BY\n" +
@@ -152,10 +150,10 @@ public class FlightDAO {
     public List<SzolgaltatoKimutatas> dalyIncome(){
         return jdbcTemplate.query("SELECT " +
                 "    TRUNC(j.kiindulasi_idopont) AS SZOLGALTATO, " +
-                "    COUNT(f.id) AS OSSZES_ELADOTT_JEGY, " +
+                "    COUNT(f.nev) AS OSSZES_ELADOTT_JEGY, " +
                 "    SUM(j.ar) AS JEGY_BEVETEL " +
                 "FROM " +
-                "    FOGLALaS f " +
+                "    JEGYEK f " +
                 "JOIN  " +
                 "    JARATOK j ON f.jarat_id = j.id " +
                 "GROUP BY " +

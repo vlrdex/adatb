@@ -20,29 +20,25 @@ public class Custom_TicketDAO {
     }
 
     public List<Custom_Ticket> readAllCustom_Ticket(){
-        List<Custom_Ticket> result = jdbcTemplate.query("SELECT JEGYKATEGORIA.NEV, FOGLALAS.ULOHELY, BIZTOSITASOK.NEV, " +
+        List<Custom_Ticket> result = jdbcTemplate.query("SELECT JEGYKATEGORIA.NEV, JEGYEK.ULOHELY, BIZTOSITASOK.NEV, " +
                 "JEGYEK.NEV, JEGYEK.EMAIL, KI.NEV AS KINT, BE.NEV AS BENT, JARATOK.KIINDULASI_IDOPONT, JARATOK.ERKEZESI_IDOPONT, JARATOK.AR " +
-                "FROM FOGLALAS, JARATOK, BIZTOSITASOK, JEGYEK, JEGYKATEGORIA, VAROS KI, VAROS BE " +
-                "WHERE JEGYKATEGORIA.ID = FOGLALAS.JEGYKATEGORIA_ID AND " +
+                "FROM JARATOK, BIZTOSITASOK, JEGYEK, JEGYKATEGORIA, VAROS KI, VAROS BE " +
+                "WHERE JEGYKATEGORIA.ID = JEGYEK.JEGYKATEGORIA_ID AND " +
                 "BIZTOSITASOK.ID = JEGYEK.BIZTOSITAS_ID AND " +
                 "KI.ID = JARATOK.KIINDULASI_HELY AND " +
                 "BE.ID = JARATOK.ERKEZESI_HELY AND " +
-                "JARATOK.ID = JEGYEK.JARAT_ID AND " +
-                "JEGYEK.JARAT_ID = FOGLALAS.JARAT_ID AND " +
-                "JEGYEK.ULOHELY = FOGLALAS.ULOHELY",new Custom_TicketDAO.Custom_TicketRowMapper());
+                "JARATOK.ID = JEGYEK.JARAT_ID AND ",new Custom_TicketDAO.Custom_TicketRowMapper());
         return result.isEmpty()? null : result;
     }
     public List<Custom_Ticket> readUserCustom_Ticket(String email){
-        List<Custom_Ticket> result = jdbcTemplate.query("SELECT JEGYKATEGORIA.NEV AS JEGYK, FOGLALAS.ULOHELY AS ULO, BIZTOSITASOK.NEV AS BIZT, " +
+        List<Custom_Ticket> result = jdbcTemplate.query("SELECT JEGYKATEGORIA.NEV AS JEGYK, JEGYEK.ULOHELY AS ULO, BIZTOSITASOK.NEV AS BIZT, " +
                 "JEGYEK.NEV AS JEGYNEV, JEGYEK.EMAIL AS JEGYEMAIL, KI.NEV AS KINT, BE.NEV AS BENT, JARATOK.KIINDULASI_IDOPONT AS KINTIDO, JARATOK.ERKEZESI_IDOPONT AS BENTIDO, JARATOK.AR AS AR " +
-                "FROM FOGLALAS, JARATOK, BIZTOSITASOK, JEGYEK, JEGYKATEGORIA, VAROS KI, VAROS BE " +
-                "WHERE JEGYKATEGORIA.ID = FOGLALAS.JEGYKATEGORIA_ID AND " +
+                "FROM JARATOK, BIZTOSITASOK, JEGYEK, JEGYKATEGORIA, VAROS KI, VAROS BE " +
+                "WHERE JEGYKATEGORIA.ID = JEGYEK.JEGYKATEGORIA_ID AND " +
                 "BIZTOSITASOK.ID = JEGYEK.BIZTOSITAS_ID AND " +
                 "KI.ID = JARATOK.KIINDULASI_HELY AND " +
                 "BE.ID = JARATOK.ERKEZESI_HELY AND " +
                 "JARATOK.ID = JEGYEK.JARAT_ID AND " +
-                "JEGYEK.JARAT_ID = FOGLALAS.JARAT_ID AND " +
-                "JEGYEK.ULOHELY = FOGLALAS.ULOHELY AND " +
                 "JEGYEK.EMAIL = ?",new Custom_TicketDAO.Custom_TicketRowMapper(), email);
         return result.isEmpty()? null : result;
     }

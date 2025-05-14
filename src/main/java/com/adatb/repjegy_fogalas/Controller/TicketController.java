@@ -89,7 +89,7 @@ public class TicketController {
         Flight flight = flightDAO.getFlightById(flight_id);
 
         try{
-            ticketDAO.createTicket(flight_id, seat, insuranceId, name, email);
+            ticketDAO.createTicket(flight_id, seat, insuranceId, name, email,ticketCategoryId);
         }catch (DataAccessException ex){
             Throwable rootCause = ex.getCause();
             if (rootCause instanceof SQLException) {
@@ -102,7 +102,6 @@ public class TicketController {
             }
         }
         }
-        bookingDAO.createBooking(flight_id, ticketCategoryId, seat);
 
 
 

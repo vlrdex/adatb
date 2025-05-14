@@ -49,7 +49,6 @@ public class AdminController {
         model.addAttribute("hotel", hotelDAO.readAllHotel());
         model.addAttribute("flight", flightDAO.readAllFlightNice());
         model.addAttribute("ticket", ticketDAO.readAllTicket());
-        model.addAttribute("booking", bookingDAO.readAllBooking());
         model.addAttribute("userstat",ticketDAO.ticketNumberForUsers());
         model.addAttribute("statistic", planeModelDAO.getAveragePriceByModell());
         model.addAttribute("incomestat", ticketDAO.getIncomeStats());
@@ -77,7 +76,7 @@ public class AdminController {
             Throwable rootCause = ex.getCause();
             if (rootCause instanceof SQLException) {
                 String message = rootCause.getMessage();
-                if (message != null && message.contains("ORA-20001")) {
+                if (message != null) {
                     // Az ORA-20001 hibát (trigger dobta) elkapjuk
                     String error = "Nem törölhető a város, mert járatok kapcsolódnak hozzá!";
                     redirectAttributes.addFlashAttribute("error", error);
@@ -192,7 +191,7 @@ public class AdminController {
         Throwable rootCause = ex.getCause();
         if (rootCause instanceof SQLException) {
             String message = rootCause.getMessage();
-            if (message != null && message.contains("ORA-20003")) {
+            if (message != null) {
                 // Az ORA-20001 hibát (trigger dobta) elkapjuk
                 String error = "Nem törölhető a modell, mert repülögép kapcsolódnak hozzá!";
                 redirectAttributes.addFlashAttribute("error", error);
@@ -240,7 +239,7 @@ public class AdminController {
             Throwable rootCause = ex.getCause();
             if (rootCause instanceof SQLException) {
                 String message = rootCause.getMessage();
-                if (message != null && message.contains("ORA-20002")) {
+                if (message != null) {
                     // Az ORA-20001 hibát (trigger dobta) elkapjuk
                     String error = "Nem törölhető a repülőgép, mert járatok kapcsolódnak hozzá!";
                     redirectAttributes.addFlashAttribute("error", error);
@@ -477,7 +476,7 @@ public class AdminController {
                               @RequestParam("insuranceId") int insuranceId,
                               @RequestParam("name") String name,
                               @RequestParam("email") String email) {
-        ticketDAO.createTicket(flightId, seat, insuranceId, name, email);
+        //ticketDAO.createTicket(flightId, seat, insuranceId, name, email);
         return "redirect:/admin";
     }
 

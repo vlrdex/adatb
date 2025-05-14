@@ -41,9 +41,9 @@ public class TicketDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createTicket(int jarat_id, int ulohely, int biztositas_id, String nev, String email){
-        jdbcTemplate.update("INSERT INTO JEGYEK (jarat_id, ulohely, biztositas_id, nev, email) VALUES (?,?,?,?,?)",
-                jarat_id, ulohely, biztositas_id, nev, email);
+    public void createTicket(int jarat_id, int ulohely, int biztositas_id, String nev, String email,int jk){
+        jdbcTemplate.update("INSERT INTO JEGYEK (jarat_id, ulohely, biztositas_id, nev, email,jegykategoria_id) VALUES (?,?,?,?,?,?)",
+                jarat_id, ulohely, biztositas_id, nev, email,jk);
     }
 
     public List<Ticket> readAllTicket(){
@@ -66,12 +66,12 @@ public class TicketDAO {
     }
 
     public List<Ticket> userTicket(String email){
-        List<Ticket> result = jdbcTemplate.query("SELECT * FROM FOGLALAS WHERE email = ?",new TicketDAO.TicketRowMapper(), email);
+        List<Ticket> result = jdbcTemplate.query("SELECT * FROM JEGYEK WHERE email = ?",new TicketDAO.TicketRowMapper(), email);
         return result;
     }
 
     public List<IncomeStats> getIncomeStats(){
-        List<IncomeStats> result = jdbcTemplate.query("SELECT      j.id AS jarat_id,     v1.nev AS indulasi_varos,     v2.nev AS celvaros,     j.kiindulasi_idopont,     r.szolgaltato,     COUNT(DISTINCT jegy.ulohely) AS eladott_jegyek,     j.ar AS alapar,     SUM(NVL(b.ar, 0)) AS biztositas_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) AS jegy_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) + SUM(NVL(b.ar, 0)) AS teljes_bevetel FROM      JARATOK j JOIN      VAROS v1 ON j.kiindulasi_hely = v1.id JOIN      VAROS v2 ON j.erkezesi_hely = v2.id JOIN      REPULOGEP r ON j.repulo_id = r.id LEFT JOIN      JEGYEK jegy ON j.id = jegy.jarat_id LEFT JOIN      FOGLALAS f ON j.id = f.jarat_id AND jegy.ulohely = f.ulohely LEFT JOIN      JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id LEFT JOIN      BIZTOSITASOK b ON jegy.biztositas_id = b.id GROUP BY      j.id, v1.nev, v2.nev, j.kiindulasi_idopont, r.szolgaltato, j.ar ORDER BY      teljes_bevetel DESC", new TicketDAO.IncomeRowMapper());
+        List<IncomeStats> result = jdbcTemplate.query("SELECT      j.id AS jarat_id,     v1.nev AS indulasi_varos,     v2.nev AS celvaros,     j.kiindulasi_idopont,     r.szolgaltato,     COUNT(DISTINCT jegy.ulohely) AS eladott_jegyek,     j.ar AS alapar,     SUM(NVL(b.ar, 0)) AS biztositas_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) AS jegy_bevetel,     (COUNT(DISTINCT jegy.ulohely) * j.ar) - SUM(j.ar * NVL(jk.kedvezmeny, 0) / 100) + SUM(NVL(b.ar, 0)) AS teljes_bevetel FROM      JARATOK j JOIN      VAROS v1 ON j.kiindulasi_hely = v1.id JOIN      VAROS v2 ON j.erkezesi_hely = v2.id JOIN      REPULOGEP r ON j.repulo_id = r.id LEFT JOIN      JEGYEK jegy ON j.id = jegy.jarat_id LEFT JOIN      JEGYKATEGORIA jk ON jegy.jegykategoria_id = jk.id LEFT JOIN      BIZTOSITASOK b ON jegy.biztositas_id = b.id GROUP BY      j.id, v1.nev, v2.nev, j.kiindulasi_idopont, r.szolgaltato, j.ar ORDER BY      teljes_bevetel DESC", new TicketDAO.IncomeRowMapper());
         return result.isEmpty()? null : result;
     }
 
@@ -169,9 +169,9 @@ public class TicketDAO {
         List<TicketList> result = jdbcTemplate.query("SELECT \n" +
                 "    jk.nev AS jegykategoria,\n" +
                 "    jk.kedvezmeny AS kedvezmeny_szazalek,\n" +
-                "    COUNT(f.id) AS foglalasok_szama,\n" +
+                "    COUNT(f.nev) AS foglalasok_szama,\n" +
                 "    ROUND(AVG(j.ar * (1 - jk.kedvezmeny/100)), 2) AS atlagos_fizetett_ar\n" +
-                "FROM FOGLALAS f\n" +
+                "FROM JEGYEK f\n" +
                 "JOIN JEGYKATEGORIA jk ON f.jegykategoria_id = jk.id\n" +
                 "JOIN JARATOK j ON f.jarat_id = j.id\n" +
                 "GROUP BY jk.nev, jk.kedvezmeny\n" +
