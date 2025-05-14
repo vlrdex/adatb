@@ -93,6 +93,7 @@ public class TicketDAO {
                     .flightId(rs.getInt("JARAT_ID"))
                     .seat(rs.getInt("ULOHELY"))
                     .insuranceId(rs.getInt("BIZTOSITAS_ID"))
+                    .jegykategoria(rs.getInt("JEGYKATEGORIA_ID"))
                     .name(rs.getString("NEV"))
                     .email(rs.getString("EMAIL"))
                     .build();

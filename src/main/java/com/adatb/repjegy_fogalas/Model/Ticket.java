@@ -12,6 +12,7 @@ public class Ticket {
     private int flightId;
     private int seat;
     private int insuranceId;
+    private int jegykategoria;
     private String name;
     private String email;
 }

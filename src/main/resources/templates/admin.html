@@ -284,6 +284,7 @@
             <th>Járat ID</th>
             <th>Ülőhely</th>
             <th>Biztosítás ID</th>
+            <th>Jegykategoria ID</th>
             <th>Név</th>
             <th>Email</th>
         </tr>
@@ -293,49 +294,9 @@
             <td th:text="${ticket.flightId}"></td>
             <td th:text="${ticket.seat}"></td>
             <td th:text="${ticket.insuranceId}"></td>
+            <td th:text="${ticket.getJegykategoria()}"></td>
             <td th:text="${ticket.name}"></td>
             <td th:text="${ticket.email}"></td>
-<!--            <td>-->
-<!--                <form th:action="@{'/admin/ticket/delete/' + ${ticket.flightId}+'/'+${ticket.seat}}" method="post">-->
-<!--                    <button type="submit">Törlés</button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--                <form th:action="@{'/admin/ticket/update/' + ${ticket.flightId}+'/'+${ticket.seat}}" method="get">-->
-<!--                    <button type="submit">Módosítás</button>-->
-<!--                </form>-->
-<!--            </td>-->
-        </tr>
-        </tbody>
-    </table>
-
-</div>
-<div>
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Járat ID</th>
-            <th>Jegykategória ID</th>
-            <th>Ülőhely</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="booking: ${booking}">
-            <td th:text="${booking.id}"></td>
-            <td th:text="${booking.flight_id}"></td>
-            <td th:text="${booking.ticket_category_id}"></td>
-            <td th:text="${booking.seat}"></td>
-<!--            <td>-->
-<!--                <form th:action="@{'/admin/booking/delete/' + ${booking.id}}" method="post">-->
-<!--                    <button type="submit">Törlés</button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--                <form th:action="@{'/admin/booking/update/' + ${booking.id}}" method="get">-->
-<!--                    <button type="submit">Módosítás</button>-->
-<!--                </form>-->
-<!--            </td>-->
         </tr>
         </tbody>
     </table>
