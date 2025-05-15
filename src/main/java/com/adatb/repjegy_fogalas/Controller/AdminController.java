@@ -73,13 +73,14 @@ public class AdminController {
         try {
             townDAO.deleteTown(town_id);
         } catch (DataAccessException ex) {
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
             Throwable rootCause = ex.getCause();
             if (rootCause instanceof SQLException) {
                 String message = rootCause.getMessage();
                 if (message != null) {
                     // Az ORA-20001 hibát (trigger dobta) elkapjuk
                     String error = "Nem törölhető a város, mert járatok kapcsolódnak hozzá!";
-                    redirectAttributes.addFlashAttribute("error", error);
+
                     return "redirect:/admin";
                 }
             }
@@ -98,18 +99,43 @@ public class AdminController {
     }
     @PostMapping("admin/town/update/{id}")
     public String updateMovie(@PathVariable("id") int town_id,
-                              @RequestParam("name") String name) {
-        townDAO.updateTown(town_id,name);
+                              @RequestParam("name") String name, RedirectAttributes redirectAttributes) {
+        try{
+            townDAO.updateTown(town_id,name);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü város";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin/town/update/" + town_id;
+                }
+            }
+        }
         return "redirect:/admin";
     }
+
     @GetMapping("admin/town/createtown")
     public String createTownView() {
         return "town-create";
     }
     @PostMapping(value = "/admin/town/createtown")
     public String createTown(
-            @RequestParam("name") String name) {
+            @RequestParam("name") String name,RedirectAttributes redirectAttributes) {
+        try {
         townDAO.createTown(name);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+         if (rootCause instanceof SQLException) {
+             String message = rootCause.getMessage();
+                 if (message != null) {
+                  String error = "Van már ilyen nevü város";
+                  redirectAttributes.addFlashAttribute("error", error);
+                 return "redirect:/admin/town/createtown";
+             }
+        }
+    }
         return "redirect:/admin";
     }
 
@@ -132,8 +158,21 @@ public class AdminController {
     public String updateInsurance(@PathVariable("id") int insurance_id,
                                   @RequestParam("name") String name,
                                   @RequestParam("cost") int cost,
-                                  @RequestParam("description") String description) {
-        insuranceDAO.updateInsurance(insurance_id,name, cost, description);
+                                  @RequestParam("description") String description , RedirectAttributes redirectAttributes) {
+        try {
+            insuranceDAO.updateInsurance(insurance_id,name, cost, description);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü biztositás";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin/insurance/update/"+insurance_id;
+                }
+            }
+        }
+
         return "redirect:/admin";
     }
     @GetMapping("admin/insurance/createinsurance")
@@ -143,8 +182,21 @@ public class AdminController {
     @PostMapping(value = "/admin/insurance/createinsurance")
     public String createInsurance(@RequestParam("name") String name,
                                   @RequestParam("cost") int cost,
-                                  @RequestParam("description") String description) {
-        insuranceDAO.createInsurance(name,cost,description);
+                                  @RequestParam("description") String description , RedirectAttributes redirectAttributes) {
+        try {
+            insuranceDAO.createInsurance(name, cost, description);
+        }catch (DataAccessException ex) {
+        Throwable rootCause = ex.getCause();
+        if (rootCause instanceof SQLException) {
+            String message = rootCause.getMessage();
+            if (message != null) {
+                String error = "Van már ilyen nevü biztositás";
+                redirectAttributes.addFlashAttribute("error", error);
+                return "redirect:/admin/insurance/createinsurance";
+            }
+        }
+    }
+
         return "redirect:/admin";
     }
 
@@ -167,8 +219,20 @@ public class AdminController {
     @PostMapping("admin/ticketcategory/update/{id}")
     public String updateTicketCategory(@PathVariable("id") int ticketcategory_id,
                                   @RequestParam("name") String name,
-                                  @RequestParam("discount") int discount) {
-        ticketCategoryDAO.updateTicket_Category(ticketcategory_id,name, discount);
+                                  @RequestParam("discount") int discount , RedirectAttributes redirectAttributes) {
+        try {
+            ticketCategoryDAO.updateTicket_Category(ticketcategory_id,name, discount);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü jegykategoria";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin/ticketcategory/update/"+ticketcategory_id;
+                }
+            }
+        }
         return "redirect:/admin";
     }
     @GetMapping("admin/ticketcategory/createticketcategory")
@@ -177,8 +241,20 @@ public class AdminController {
     }
     @PostMapping(value = "/admin/ticketcategory/createticketcategory")
     public String createTicketCategory(@RequestParam("name") String name,
-                                       @RequestParam("discount") int discount) {
-        ticketCategoryDAO.createTicket_Category(name,discount);
+                                       @RequestParam("discount") int discount , RedirectAttributes redirectAttributes) {
+        try {
+            ticketCategoryDAO.createTicket_Category(name,discount);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü jegykategoria";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin/ticketcategory/createticketcategory";
+                }
+            }
+        }
         return "redirect:/admin";
     }
 
@@ -188,17 +264,17 @@ public class AdminController {
         try{
             planeModelDAO.deletePlane_Model(planemodel_id);
         }catch (DataAccessException ex){
-        Throwable rootCause = ex.getCause();
-        if (rootCause instanceof SQLException) {
-            String message = rootCause.getMessage();
-            if (message != null) {
-                // Az ORA-20001 hibát (trigger dobta) elkapjuk
-                String error = "Nem törölhető a modell, mert repülögép kapcsolódnak hozzá!";
-                redirectAttributes.addFlashAttribute("error", error);
-                return "redirect:/admin";
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    // Az ORA-20001 hibát (trigger dobta) elkapjuk
+                    String error = "Nem törölhető a modell, mert repülögép kapcsolódnak hozzá!";
+                    redirectAttributes.addFlashAttribute("error", error);
+                    return "redirect:/admin";
+                }
             }
         }
-    }
         return "redirect:/admin";
     }
     @GetMapping("/admin/planemodel/update/{planemodel_id}")
@@ -213,8 +289,21 @@ public class AdminController {
     @PostMapping("admin/planemodel/update/{id}")
     public String updatePlaneModel(@PathVariable("id") String planemodel_id,
                                    @RequestParam("name") String name,
-                                   @RequestParam("seatsNumber") int seatsNumber) {
-        planeModelDAO.updatePlane_Model(planemodel_id,name, seatsNumber);
+                                   @RequestParam("seatsNumber") int seatsNumber, RedirectAttributes redirectAttributes) {
+        try{
+            planeModelDAO.updatePlane_Model(planemodel_id,name, seatsNumber);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü modell";
+                    redirectAttributes.addFlashAttribute("error", error);
+
+                return "redirect:/admin/planemodel/update/"+planemodel_id;
+            }
+        }
+    }
         return "redirect:/admin";
     }
     @GetMapping("admin/planemodel/createplanemodel")
@@ -224,8 +313,21 @@ public class AdminController {
     @PostMapping(value = "/admin/planemodel/createplanemodel")
     public String createPlaneModel(@RequestParam("model") String model,
                                    @RequestParam("name") String name,
-                                   @RequestParam("seatsNumber") int seatsNumber) {
-        planeModelDAO.createPlaneModel(model, name, seatsNumber);
+                                   @RequestParam("seatsNumber") int seatsNumber, RedirectAttributes redirectAttributes) {
+        try{
+            planeModelDAO.createPlaneModel(model, name, seatsNumber);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü modell";
+                    redirectAttributes.addFlashAttribute("error", error);
+
+                    return "redirect:/admin/planemodel/createplanemodel";
+                }
+            }
+        }
         return "redirect:/admin";
     }
 
@@ -301,8 +403,22 @@ public class AdminController {
     @PostMapping("admin/hotel/update/{id}")
     public String updateHotel(@PathVariable("id") int hotel_id,
                               @RequestParam("name") String name,
-                              @RequestParam("description") String descripton) {
-        hotelDAO.updateHotel(hotel_id, name, descripton);
+                              @RequestParam("description") String descripton , RedirectAttributes redirectAttributes) {
+
+        try{
+            hotelDAO.updateHotel(hotel_id, name, descripton);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü hotel a városban";
+                    redirectAttributes.addFlashAttribute("error", error);
+
+                    return "redirect:/admin/hotel/update/"+hotel_id;
+                }
+            }
+        }
         return "redirect:/admin";
     }
     @GetMapping("admin/hotel/createhotel")
@@ -313,8 +429,21 @@ public class AdminController {
     @PostMapping(value = "/admin/hotel/createhotel")
     public String createHotel(@RequestParam("townId") int townId,
                               @RequestParam("name") String name,
-                              @RequestParam("description") String description) {
-        hotelDAO.createHotel(townId, name, description);
+                              @RequestParam("description") String description , RedirectAttributes redirectAttributes) {
+        try{
+            hotelDAO.createHotel(townId, name, description);
+        }catch (DataAccessException ex) {
+            Throwable rootCause = ex.getCause();
+            if (rootCause instanceof SQLException) {
+                String message = rootCause.getMessage();
+                if (message != null) {
+                    String error = "Van már ilyen nevü hotel a városban";
+                    redirectAttributes.addFlashAttribute("error", error);
+
+                    return "redirect:/admin/hotel/createhotel";
+                }
+            }
+        }
         return "redirect:/admin";
     }
 

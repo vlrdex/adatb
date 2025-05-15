@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
+<div>
+    <p th:text="${error}"></p>
+</div>
 <form th:action="@{/admin/planemodel/update/{planemodel_id}(planemodel_id=${planemodel.model})}" method="post">
     <label for="name">Neve:</label>
     <input type="text" id="name" name="name" th:value="${planemodel.name}" required><br>

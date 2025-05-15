@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
+<div>
+    <p th:text="${error}"></p>
+</div>
 <form th:action="@{/admin/planemodel/createplanemodel}" method="post">
 
     <label for="model">Repülőgép modell:</label>

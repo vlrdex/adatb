@@ -6,6 +6,9 @@
 </head>
 <body>
 <div>
+    <p th:text="${error}"></p>
+</div>
+<div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
 <form th:action="@{/admin/hotel/createhotel}" method="post">

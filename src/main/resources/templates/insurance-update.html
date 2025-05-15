@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
+<div>
+    <p th:text="${error}"></p>
+</div>
 <form th:action="@{/admin/insurance/update/{insurance_id}(insurance_id=${insurance.id})}" method="post">
     <label for="name">Neve:</label>
     <input type="text" id="name" name="name" th:value="${insurance.name}" required><br>

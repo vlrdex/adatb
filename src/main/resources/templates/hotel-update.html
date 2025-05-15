@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
+<div>
+    <p th:text="${error}"></p>
+</div>
 <form th:action="@{/admin/hotel/update/{hotel_id}(hotel_id=${hotel.id})}" method="post">
 
     <label for="name">Neve:</label>

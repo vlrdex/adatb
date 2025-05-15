@@ -8,6 +8,9 @@
 <div>
     <button onclick="window.location.href='/admin'">Vissza</button>
 </div>
+<div>
+    <p th:text="${error}"></p>
+</div>
 <form th:action="@{/admin/ticketcategory/update/{ticketcategory_id}(ticketcategory_id=${ticketcategory.id})}" method="post">
     <label for="name">Neve:</label>
     <input type="text" id="name" name="name" th:value="${ticketcategory.name}" required><br>
