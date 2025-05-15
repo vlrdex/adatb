@@ -101,7 +101,6 @@ CREATE TABLE REPULOGEP (
     szolgaltato VARCHAR2(100) NOT NULL,
     modell VARCHAR2(100) NOT NULL,
     CONSTRAINT fk_modell FOREIGN KEY (modell) REFERENCES MODELL (modell)
-    ON DELETE CASCADE
 );
 
 CREATE TABLE SZALLODAK (
@@ -111,7 +110,6 @@ CREATE TABLE SZALLODAK (
     leiras VARCHAR2(256),
     UNIQUE(varos_id,nev),
     CONSTRAINT fk_varos FOREIGN KEY (varos_id) REFERENCES VAROS (id)
-	ON DELETE CASCADE
 );
 
 CREATE TABLE JARATOK (
@@ -122,12 +120,9 @@ CREATE TABLE JARATOK (
     erkezesi_idopont DATE NOT NULL,
     repulo_id INTEGER NOT NULL,
     ar INTEGER NOT NULL,
-    CONSTRAINT fk_repulo FOREIGN KEY (repulo_id) REFERENCES REPULOGEP (id)
-    ON DELETE CASCADE,
-    CONSTRAINT fk_kiindulasi_hely FOREIGN KEY (kiindulasi_hely) REFERENCES VAROS (id)
-    ON DELETE CASCADE,
+    CONSTRAINT fk_repulo FOREIGN KEY (repulo_id) REFERENCES REPULOGEP (id),
+    CONSTRAINT fk_kiindulasi_hely FOREIGN KEY (kiindulasi_hely) REFERENCES VAROS (id),
     CONSTRAINT fk_erkezesi_hely FOREIGN KEY (erkezesi_hely) REFERENCES VAROS (id)
-    ON DELETE CASCADE
 );
 
 CREATE TABLE JEGYEK (
@@ -471,22 +466,6 @@ BEGIN
 END;
 /
 
--- (ON DELETE RESTRICT a JARATOK táblához - megakadályozza a törlést, ha van kapcsolódó járat)
-CREATE OR REPLACE TRIGGER varos_delete_jaratok_restrict
-BEFORE DELETE ON VAROS
-FOR EACH ROW
-DECLARE
-    v_count NUMBER;
-BEGIN
-    SELECT COUNT(*) INTO v_count 
-    FROM JARATOK 
-    WHERE kiindulasi_hely = :OLD.id OR erkezesi_hely = :OLD.id;
-    
-    IF v_count > 0 THEN
-        RAISE_APPLICATION_ERROR(-20001, 'Nem törölhető a város, mert járatok kapcsolódnak hozzá!');
-    END IF;
-END;
-/
 
 -- REPULOGEP táblához tartozó trigger
 -- (ON UPDATE CASCADE a JARATOK táblához)
@@ -497,23 +476,6 @@ BEGIN
     UPDATE JARATOK
     SET repulo_id = :NEW.id
     WHERE repulo_id = :OLD.id;
-END;
-/
-
--- (ON DELETE RESTRICT a JARATOK táblához - megakadályozza a törlést, ha van kapcsolódó járat)
-CREATE OR REPLACE TRIGGER repulogep_delete_jaratok_restrict
-BEFORE DELETE ON REPULOGEP
-FOR EACH ROW
-DECLARE
-    v_count NUMBER;
-BEGIN
-    SELECT COUNT(*) INTO v_count 
-    FROM JARATOK 
-    WHERE repulo_id = :OLD.id;
-    
-    IF v_count > 0 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Nem törölhető a repülőgép, mert járatok kapcsolódnak hozzá!');
-    END IF;
 END;
 /
 

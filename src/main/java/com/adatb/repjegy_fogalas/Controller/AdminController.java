@@ -73,14 +73,13 @@ public class AdminController {
         try {
             townDAO.deleteTown(town_id);
         } catch (DataAccessException ex) {
-            redirectAttributes.addFlashAttribute("error", ex.getMessage());
             Throwable rootCause = ex.getCause();
             if (rootCause instanceof SQLException) {
                 String message = rootCause.getMessage();
                 if (message != null) {
                     // Az ORA-20001 hibát (trigger dobta) elkapjuk
                     String error = "Nem törölhető a város, mert járatok kapcsolódnak hozzá!";
-
+                    redirectAttributes.addFlashAttribute("error", error);
                     return "redirect:/admin";
                 }
             }
